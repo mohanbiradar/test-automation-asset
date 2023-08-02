@@ -1,0 +1,27 @@
+selenium-hub:
+  restart: always
+  image: selenium/hub:latest
+  ports:
+    - "4444:4444"
+#selenium-chrome
+selenium-chrome:
+  restart: always
+  image: selenium/node-chrome-debug
+  stdin_open: true
+  ports:
+  - "5900-5999:5900"
+  environment:
+    - VNC_PASSWORD=secret
+    - SCREEN_WIDTH=1920
+    - SCREEN_HEIGHT=1080 
+  links:
+    - selenium-hub:hub
+  volumes:
+  - /dev/shm:/dev/shm
+
+#selenium-firefox
+# selenium-firefox:
+#   restart: always
+#   image: selenium/node-firefox-debug
+#   links:
+#     - selenium-hub:hub
