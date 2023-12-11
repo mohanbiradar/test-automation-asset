@@ -1,0 +1,241 @@
+import io.restassured.RestAssured;
+import io.restassured.authentication.BasicAuthScheme;
+import io.restassured.http.ContentType;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class XrayTestUploaderWithTestSet {
+
+    public static void main(String[] args) {
+        // Jira API URL
+        String jiraUrl = "https://your_jira_url/rest/api/2";
+        String xrayUrl = "https://your_jira_url/rest/raven/2";
+
+        // Jira authentication details
+        String jiraUser = "your_jira_username";
+        String jiraApiToken = "your_jira_api_token";
+
+        // Project details
+        String projectKey = "your_project_key";
+
+        // Test set details
+        String testSetKey = createTestSet(jiraUrl, jiraUser, jiraApiToken, projectKey);
+
+        // List of feature files to upload
+        List<String> featureFiles = List.of("path/to/feature1.feature", "path/to/feature2.feature");
+
+        // Configure RestAssured
+        RestAssured.baseURI = jiraUrl;
+        BasicAuthScheme authScheme = new BasicAuthScheme();
+        authScheme.setUserName(jiraUser);
+        authScheme.setPassword(jiraApiToken);
+        RestAssured.authentication = authScheme;
+
+        // Loop through feature files
+        for (String featureFile : featureFiles) {
+            try {
+                // Read the content of the feature file
+                String featureContent = new String(Files.readAllBytes(Paths.get(featureFile)));
+
+                // Create a new Test issue in Jira using Xray API
+                String testKey = createTest(jiraUrl, jiraUser, jiraApiToken, xrayUrl, projectKey, testSetKey, featureFile, featureContent);
+                
+                System.out.println("Test created successfully for " + featureFile + " with key " + testKey);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to read content from " + featureFile);
+            }
+        }
+    }
+
+    private static String createTestSet(String jiraUrl, String jiraUser, String jiraApiToken, String projectKey) {
+        // Create a new Test Set in Jira using Xray API
+        String testSetKey = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body("{ \"fields\": { \"project\": { \"key\": \"" + projectKey + "\" }, " +
+                        "\"summary\": \"Automated Test Set\", " +
+                        "\"issuetype\": { \"name\": \"Test Set\" } } } }")
+                .when()
+                .post(jiraUrl + "/issue")
+                .then()
+                .statusCode(201)
+                .extract().path("key");
+
+        System.out.println("Test Set created successfully with key " + testSetKey);
+        return testSetKey;
+    }
+
+    private static String createTest(String jiraUrl, String jiraUser, String jiraApiToken, String xrayUrl,
+                                     String projectKey, String testSetKey, String featureFileName, String featureContent) {
+        // Create a new Test issue in Jira using Xray API
+        String testKey = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body("{ \"info\": { \"projectKey\": \"" + projectKey +
+                        "\", \"summary\": \"Automated Test from " + featureFileName +
+                        "\", \"testSetKey\": \"" + testSetKey + "\" }, \"testScript\": \"" +
+                        featureContent.replace("\"", "\\\"").replace("\n", "\\n") + "\" }")
+                .when()
+                .post(xrayUrl + "/import/execution")
+                .then()
+                .statusCode(201)
+                .extract().path("testExecutionKey");
+
+        return testKey;
+    }
+}
+-------------------------------------------------------------------
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitOption.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class XrayTestUploaderWithDynamicFeatures {
+
+    public static void main(String[] args) {
+        // Jira API URL
+        String jiraUrl = "https://your_jira_url/rest/api/2";
+        String xrayUrl = "https://your_jira_url/rest/raven/2";
+
+        // Jira authentication details
+        String jiraUser = "your_jira_username";
+        String jiraApiToken = "your_jira_api_token";
+
+        // Project details
+        String projectKey = "your_project_key";
+
+        // Test set details
+        String testSetKey = createTestSet(jiraUrl, jiraUser, jiraApiToken, projectKey);
+
+        // List of feature files to upload
+        List<String> featureFiles = collectFeatureFiles("path/to/your/feature/directory");
+
+        // Configure RestAssured
+        // ... (RestAssured configuration)
+
+        // Loop through feature files
+        for (String featureFile : featureFiles) {
+            try {
+                // Read the content of the feature file
+                String featureContent = new String(Files.readAllBytes(Paths.get(featureFile)));
+
+                // Create a new Test issue in Jira using Xray API
+                String testKey = createTest(jiraUrl, jiraUser, jiraApiToken, xrayUrl, projectKey, testSetKey, featureFile, featureContent);
+
+                System.out.println("Test created successfully for " + featureFile + " with key " + testKey);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to read content from " + featureFile);
+            }
+        }
+    }
+
+    private static List<String> collectFeatureFiles(String directoryPath) {
+        List<String> featureFiles = new ArrayList<>();
+        try {
+            // Collect all feature files recursively from the specified directory
+            featureFiles = Files.walk(Paths.get(directoryPath), FileVisitOption.FOLLOW_LINKS)
+                    .filter(path -> path.toString().endsWith(".feature"))
+                    .map(Path::toString)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to collect feature files from " + directoryPath);
+        }
+        return featureFiles;
+    }
+
+    // (createTestSet and createTest methods remain unchanged)
+}
+----------------------------------------------------------------------------
+import io.restassured.RestAssured;
+import io.restassured.authentication.BasicAuthScheme;
+import io.restassured.http.ContentType;
+
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class XrayTestUploaderWithZip {
+
+    public static void main(String[] args) {
+        // Jira API URL
+        String jiraUrl = "https://your_jira_url/rest/api/2";
+        String xrayUrl = "https://your_jira_url/rest/raven/2";
+
+        // Jira authentication details
+        String jiraUser = "your_jira_username";
+        String jiraApiToken = "your_jira_api_token";
+
+        // Project details
+        String projectKey = "your_project_key";
+
+        // Test set details
+        String testSetKey = createTestSet(jiraUrl, jiraUser, jiraApiToken, projectKey);
+
+        // Directory containing feature files
+        String featureDirectory = "path/to/your/feature/directory";
+
+        // Zip file name
+        String zipFileName = "features.zip";
+
+        // List of feature files to upload
+        List<String> featureFiles = collectFeatureFiles(featureDirectory);
+
+        // Create a zip file
+        createZipFile(featureFiles, featureDirectory, zipFileName);
+
+        // Configure RestAssured
+        // ... (RestAssured configuration)
+
+        // Upload the zip file
+        uploadZipFile(jiraUrl, jiraUser, jiraApiToken, xrayUrl, projectKey, testSetKey, zipFileName);
+
+        System.out.println("Feature files uploaded successfully.");
+    }
+
+    private static void createZipFile(List<String> featureFiles, String sourceDir, String zipFileName) {
+        try {
+            // Create a zip file
+            Path zipFilePath = Paths.get(zipFileName);
+            try (FileSystem fs = FileSystems.newFileSystem(zipFilePath, null)) {
+                for (String featureFile : featureFiles) {
+                    Path sourcePath = Paths.get(featureFile);
+                    Path destPath = fs.getPath(sourcePath.toString());
+
+                    Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to create the zip file.");
+        }
+    }
+
+    private static void uploadZipFile(String jiraUrl, String jiraUser, String jiraApiToken,
+                                      String xrayUrl, String projectKey, String testSetKey, String zipFileName) {
+        // Upload the zip file using Xray API
+        RestAssured.given()
+                .auth().preemptive().basic(jiraUser, jiraApiToken)
+                .contentType("multipart/form-data")
+                .multiPart("file", zipFileName, new java.io.File(zipFileName))
+                .when()
+                .post(xrayUrl + "/import/execution?projectKey=" + projectKey + "&testSetKey=" + testSetKey)
+                .then()
+                .statusCode(200)
+                .log().ifError();
+    }
+
+    // (createTestSet method remains unchanged)
+}
