@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class LogParser {
+
+    public static void main(String[] args) {
+        String filePath = "path_to_your_log_file.log";
+        String searchText = "your_search_text";
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line;
+            Pattern pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}).*?" + searchText);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            Date firstOccurrenceTime = null;
+            Date lastOccurrenceTime = null;
+            int occurrenceCount = 0;
+
+            while ((line = reader.readLine()) != null) {
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    occurrenceCount++;
+                    Date timestamp = dateFormat.parse(matcher.group(1));
+                    if (firstOccurrenceTime == null) {
+                        firstOccurrenceTime = timestamp;
+                    }
+                    lastOccurrenceTime = timestamp;
+                }
+            }
+
+            reader.close();
+
+            if (firstOccurrenceTime != null) {
+                long totalTimeTakenInMillis = lastOccurrenceTime.getTime() - firstOccurrenceTime.getTime();
+                long totalTimeTakenInSeconds = totalTimeTakenInMillis / 1000;
+                System.out.println("First occurrence of '" + searchText + "' at: " + dateFormat.format(firstOccurrenceTime));
+                System.out.println("Last occurrence of '" + searchText + "' at: " + dateFormat.format(lastOccurrenceTime));
+                System.out.println("Total occurrences of '" + searchText + "': " + occurrenceCount);
+                System.out.println("Total time taken: " + totalTimeTakenInSeconds + " seconds");
+            } else {
+                System.out.println("No occurrences of '" + searchText + "' found in the log file.");
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+}
