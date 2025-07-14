@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete QA Testing Prompt Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .main-header { 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            color: #fff; 
+            padding: 40px 0 30px 0; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+            margin-bottom: 30px; 
+        }
+        .main-header .logo { 
+            width: 60px; 
+            height: 60px; 
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4); 
+            border-radius: 50%; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .main-header h1 { 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            margin-bottom: 5px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .main-header p { 
+            font-size: 1.2rem; 
+            margin-bottom: 0; 
+            opacity: 0.9;
+        }
+        .card-section { 
+            background: rgba(255,255,255,0.95); 
+            border-radius: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            padding: 30px; 
+            margin-bottom: 30px; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .category-tab {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .category-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+        }
+        .category-tab.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+        }
+        .prompt-card, .output-card { 
+            background: linear-gradient(145deg, #f8f9ff, #e6f3ff);
+            border: 2px solid #e3f2fd;
+            border-radius: 15px; 
+            padding: 25px; 
+            margin-bottom: 25px; 
+            transition: all 0.5s ease;
+            opacity: 0; 
+            transform: translateY(30px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+        .prompt-card.show, .output-card.show { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        .prompt-card h3, .output-card h3 { 
+            color: #1e3c72; 
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .prompt-text {
+            background: rgba(255,255,255,0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .btn-group-custom {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .btn-custom:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            color: white;
+        }
+        .output-content {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e3f2fd;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td { 
+            border: 1px solid #e3f2fd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: linear-gradient(145deg, #fff, #f8f9ff);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            border: 1px solid #e3f2fd;
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .metric-label {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-top: 10px;
+        }
+        .progress-bar-custom {
+            height: 8px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: linear-gradient(145deg, #fff, #f8f9ff);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #e3f2fd;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        .footer { 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            color: #fff; 
+            text-align: center; 
+            padding: 25px 0; 
+            margin-top: 50px; 
+        }
+        .footer a { 
+            color: #4ecdc4; 
+            text-decoration: none; 
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            overflow-x: auto;
+        }
+        @media (max-width: 768px) {
+            .main-header h1 { font-size: 2rem; }
+            .card-section { padding: 20px; }
+            .category-tabs { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header d-flex align-items-center justify-content-center">
+        <div class="logo">
+            <span style="font-size:2.5rem;color:#fff;">🚀</span>
+        </div>
+        <div>
+            <h1>Complete QA Testing Prompt Generator</h1>
+            <p>Comprehensive AI-powered testing prompts for modern QA professionals</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card-section">
+            <h2 class="mb-4" style="color: #1e3c72;">🚀 Next-Gen AI-Powered QA Platform: Innovation, Analytics & Integration</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h5>AI-Driven Insights</h5>
+                    <p>Leverage AI to generate, enhance, and validate test cases, strategies, and automation scripts for maximum coverage and efficiency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h5>Predictive Analytics</h5>
+                    <p>Identify risk areas, forecast defect trends, and optimize test planning with built-in analytics and smart recommendations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h5>Seamless Tool Integration</h5>
+                    <p>Integrate effortlessly with Jira Xray, Excel, GitLab, and leading automation frameworks for a unified QA workflow.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h5>AI-Powered Test Generation</h5>
+                    <p>Generate comprehensive test cases, plans, and strategies using advanced AI prompts tailored for modern testing frameworks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h5>Multi-Framework Support</h5>
+                    <p>Support for Selenium, Cypress, Playwright, RestAssured, Postman, JMeter, and more testing tools.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h5>CI/CD Integration</h5>
+                    <p>Prompts for DevOps integration, pipeline testing, and continuous quality assurance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h5>Cross-Platform Testing</h5>
+                    <p>Web, mobile, API, database, and cloud testing scenarios covered comprehensively.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <h3 style="color: #1e3c72; margin-bottom: 20px;">Select Testing Category</h3>
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="functional" onclick="selectCategory('functional')">Functional Testing</button>
+                <button class="category-tab" data-category="automation" onclick="selectCategory('automation')">Test Automation</button>
+                <button class="category-tab" data-category="performance" onclick="selectCategory('performance')">Performance Testing</button>
+                <button class="category-tab" data-category="security" onclick="selectCategory('security')">Security Testing</button>
+                <button class="category-tab" data-category="api" onclick="selectCategory('api')">API Testing</button>
+                <button class="category-tab" data-category="mobile" onclick="selectCategory('mobile')">Mobile Testing</button>
+                <button class="category-tab" data-category="database" onclick="selectCategory('database')">Database Testing</button>
+                <button class="category-tab" data-category="cloud" onclick="selectCategory('cloud')">Cloud Testing</button>
+                <button class="category-tab" data-category="devops" onclick="selectCategory('devops')">DevOps & CI/CD</button>
+                <button class="category-tab" data-category="management" onclick="selectCategory('management')">Test Management</button>
+            </div>
+            
+            <div id="subcategoryContainer">
+                <label for="promptSelect" class="form-label"><strong>Select Specific Testing Activity</strong></label>
+                <select id="promptSelect" class="form-select mb-3">
+                </select>
+            </div>
+
+            <!-- User Story and Advanced Options -->
+            <div id="userInputSection" style="margin-bottom: 1rem;">
+                <label for="userStoryInput" class="form-label">
+                    <strong>Optional: Paste User Story / Requirement</strong>
+                    <span title="Paste a user story, requirement, or context to personalize the prompt.">(?)</span>
+                </label>
+                <textarea id="userStoryInput" class="form-control mb-2" rows="2" placeholder="E.g., As a user, I want to reset my password so that..."></textarea>
+                <a href="#" id="toggleAdvanced" onclick="toggleAdvancedOptions(); return false;" style="font-size:0.95em;">Show Advanced Options</a>
+                <div id="advancedOptions" style="display:none; margin-top:0.5rem;">
+                    <label class="form-label"><strong>Optional: Additional Details</strong></label>
+                    <input type="text" id="acceptanceCriteria" class="form-control mb-1" placeholder="Acceptance Criteria (optional)" aria-label="Acceptance Criteria">
+                    <input type="text" id="testData" class="form-control mb-1" placeholder="Test Data (optional)" aria-label="Test Data">
+                    <input type="text" id="environment" class="form-control mb-1" placeholder="Environment (optional)" aria-label="Environment">
+                </div>
+            </div>
+            
+            <button onclick="displayPrompt()" class="btn btn-custom">Generate Testing Prompt & Sample Output</button>
+        </div>
+
+        <div id="promptDisplay" class="prompt-card" style="display: none;">
+            <h3>🎯 AI Testing Prompt</h3>
+            <div class="prompt-text" id="promptText"></div>
+            <div class="btn-group-custom">
+                <button class="btn btn-custom" onclick="copyPrompt()">📋 Copy Prompt</button>
+                <button class="btn btn-custom" onclick="enhancePrompt()">✨ Enhance Prompt</button>
+                <button class="btn btn-custom" onclick="generateVariations()">🔄 Generate Variations</button>
+            </div>
+        </div>
+
+        <div id="outputDisplay" class="output-card" style="display: none;">
+            <h3>📊 Expected Output Sample</h3>
+            <div class="btn-group-custom">
+                <button class="btn btn-custom" onclick="copyOutput()">📋 Copy Output</button>
+                <button class="btn btn-custom" onclick="downloadOutput()">💾 Download Excel</button>
+                <button class="btn btn-custom" onclick="exportToJira()">🎯 Export to Jira</button>
+            </div>
+            <div class="output-content" id="outputContent"></div>
+        </div>
+
+        <div class="card-section">
+            <h3 style="color: #1e3c72; margin-bottom: 20px;">📈 QA Metrics Dashboard</h3>
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-value">94%</div>
+                    <div class="metric-label">Test Coverage</div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: 94%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">87%</div>
+                    <div class="metric-label">Automation Rate</div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: 87%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">32%</div>
+                    <div class="metric-label">Defect Reduction</div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: 32%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">96%</div>
+                    <div class="metric-label">Test Pass Rate</div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: 96%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <hr style="margin: 24px 0 16px 0; border-top: 1px solid #4ecdc4; opacity:0.3;">
+        <div style="text-align:left; max-width:900px; margin:0 auto;">
+            <h5 style="color:#4ecdc4; font-weight:700; margin-bottom:8px;">Future Enhancements</h5>
+            <ul style="font-size:1em; padding-left:18px;">
+                <li><b>AI-Driven Prompt Generation & Enhancement</b><br>
+                    <span style="font-size:0.97em; color:#e0e0e0;">Business Value: Delivers smarter, context-aware prompts and test cases, saving time and improving quality.<br>
+                    <i>Implementation:</i> Integrate with an LLM API (OpenAI, Azure, GitLab Duo) and use user input/context to generate or enhance prompts. Add backend endpoint and UI for AI-powered actions.</span>
+                </li>
+                <li><b>Collaboration & Sharing</b><br>
+                    <span style="font-size:0.97em; color:#e0e0e0;">Business Value: Boosts team productivity and transparency by enabling real-time sharing, review, and export to tools like Jira/Xray.<br>
+                    <i>Implementation:</i> Add sharing options (email, Slack, Teams), real-time comments, and export integrations using APIs/webhooks. Add user authentication for team features.</span>
+                </li>
+                <li><b>Custom Templates & Field Mapping</b><br>
+                    <span style="font-size:0.97em; color:#e0e0e0;">Business Value: Increases flexibility and adoption by letting teams tailor prompts and outputs to their processes and tools.<br>
+                    <i>Implementation:</i> Allow admins to define templates and field mappings via a UI. Store templates in backend or local storage. Map fields to Excel, Jira, Markdown, etc.</span>
+                </li>
+                <li><b>Analytics & Reporting</b><br>
+                    <span style="font-size:0.97em; color:#e0e0e0;">Business Value: Provides actionable insights for management and continuous improvement of QA processes.<br>
+                    <i>Implementation:</i> Track usage metrics, prompt effectiveness, and user feedback. Visualize with charts/KPIs. Export reports as PDF/Excel. Requires backend for data storage.</span>
+                </li>
+                <li><b>Advanced Output Formats</b><br>
+                    <span style="font-size:0.97em; color:#e0e0e0;">Business Value: Enables seamless integration with enterprise workflows and documentation systems.<br>
+                    <i>Implementation:</i> Use libraries like SheetJS for .xlsx export, jsPDF for PDF, and add HTML/Markdown export options. Add UI for format selection.</span>
+                </li>
+            </ul>
+        </div>
+        <div style="margin-top: 32px; text-align:center;">
+            <div><strong>QA Testing Excellence Hub</strong> - Empowering Quality Engineers</div>
+            <div style="margin-top: 10px;">
+                <a href="mailto:qa@example.com">Contact QA Team</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCategory = 'functional';
+        
+        // Comprehensive testing prompts organized by category
+        const testingPrompts = {
+            functional: {
+                'Test Case Design': {
+                    text: `You are a senior QA engineer specializing in functional testing. For the given user story/requirement, create comprehensive test cases following industry best practices. Include: Test Case ID, Test Scenario, Preconditions, Test Steps (detailed), Expected Results, Test Data, Priority (Critical/High/Medium/Low), Test Type (Positive/Negative/Boundary), and Traceability Requirements. Ensure coverage of happy path, edge cases, error conditions, and accessibility requirements. Format output for Excel/Jira Xray import.`,
+                    output: `<table>
+                        <tr><th>Test Case ID</th><th>Test Scenario</th><th>Preconditions</th><th>Test Steps</th><th>Expected Results</th><th>Test Data</th><th>Priority</th><th>Test Type</th><th>Traceability</th></tr>
+                        <tr><td>TC_FUNC_001</td><td>User login with valid credentials</td><td>User account exists and is active</td><td>1. Navigate to login page<br>2. Enter valid email<br>3. Enter valid password<br>4. Click login button</td><td>User successfully logged in and redirected to dashboard</td><td>email: test@example.com, password: Test123!</td><td>Critical</td><td>Positive</td><td>REQ-001</td></tr>
+                        <tr><td>TC_FUNC_002</td><td>User login with invalid password</td><td>User account exists</td><td>1. Navigate to login page<br>2. Enter valid email<br>3. Enter invalid password<br>4. Click login button</td><td>Error message displayed: "Invalid credentials"</td><td>email: test@example.com, password: wrongpass</td><td>High</td><td>Negative</td><td>REQ-001</td></tr>
+                        <tr><td>TC_FUNC_003</td><td>Login with empty fields</td><td>Login page loaded</td><td>1. Navigate to login page<br>2. Leave email field empty<br>3. Leave password field empty<br>4. Click login button</td><td>Validation messages displayed for both fields</td><td>email: "", password: ""</td><td>Medium</td><td>Boundary</td><td>REQ-001</td></tr>
+                    </table>`
+                },
+                'Test Plan Creation': {
+                    text: `You are a QA lead creating a comprehensive test plan. Generate a detailed test plan document including: Executive Summary, Testing Objectives, Scope (In-scope/Out-of-scope), Test Strategy, Test Approach, Entry/Exit Criteria, Test Environment Requirements, Resource Planning, Risk Analysis, Test Deliverables, Schedule, and Sign-off Criteria. Make it suitable for stakeholder review and project management tracking.`,
+                    output: `<table>
+                        <tr><th>Section</th><th>Details</th></tr>
+                        <tr><td>Executive Summary</td><td>Comprehensive testing of user authentication module to ensure security, functionality, and user experience standards</td></tr>
+                        <tr><td>Testing Objectives</td><td>Validate login functionality, security measures, error handling, and performance under load</td></tr>
+                        <tr><td>Scope - In Scope</td><td>Web login, mobile login, API authentication, password reset, session management</td></tr>
+                        <tr><td>Scope - Out of Scope</td><td>Third-party integrations, legacy system compatibility</td></tr>
+                        <tr><td>Test Strategy</td><td>Risk-based testing with 70% automation, 30% manual exploratory testing</td></tr>
+                        <tr><td>Entry Criteria</td><td>Feature complete, unit tests passed, test environment ready</td></tr>
+                        <tr><td>Exit Criteria</td><td>All critical and high priority tests passed, no open high/critical defects</td></tr>
+                        <tr><td>Test Environment</td><td>Staging environment with production-like data, multiple browser/device combinations</td></tr>
+                        <tr><td>Resources</td><td>2 QA Engineers, 1 Automation Engineer, 1 Performance Tester</td></tr>
+                        <tr><td>Risk Analysis</td><td>Security vulnerabilities (High), Performance degradation (Medium), Browser compatibility (Low)</td></tr>
+                    </table>`
+                },
+                'Bug Report Template': {
+                    text: `You are a QA engineer documenting defects. Create a comprehensive bug report template with: Bug ID, Summary, Description, Steps to Reproduce, Expected vs Actual Results, Severity/Priority, Environment Details, Test Data Used, Screenshots/Attachments, Reporter, Assignee, and Resolution. Include guidelines for severity classification and priority assignment.`,
+                    output: `<table>
+                        <tr><th>Field</th><th>Description</th><th>Example</th></tr>
+                        <tr><td>Bug ID</td><td>Unique identifier</td><td>BUG-2024-001</td></tr>
+                        <tr><td>Summary</td><td>Brief description of the issue</td><td>Login fails with valid credentials on Chrome</td></tr>
+                        <tr><td>Description</td><td>Detailed explanation of the bug</td><td>User cannot log in with valid credentials on Chrome browser v120+</td></tr>
+                        <tr><td>Steps to Reproduce</td><td>Step-by-step instructions</td><td>1. Open Chrome browser<br>2. Navigate to login page<br>3. Enter valid credentials<br>4. Click login</td></tr>
+                        <tr><td>Expected Result</td><td>What should happen</td><td>User should be logged in successfully</td></tr>
+                        <tr><td>Actual Result</td><td>What actually happens</td><td>Error message: "Something went wrong"</td></tr>
+                        <tr><td>Severity</td><td>Impact level (Critical/High/Medium/Low)</td><td>High</td></tr>
+                        <tr><td>Priority</td><td>Urgency (P1/P2/P3/P4)</td><td>P1</td></tr>
+                        <tr><td>Environment</td><td>Testing environment details</td><td>Chrome 120, Windows 11, Staging</td></tr>
+                    </table>`
+                }
+            },
+            automation: {
+                'Selenium Test Scripts': {
+                    text: `You are a test automation engineer specializing in Selenium WebDriver. Create comprehensive automation test scripts for the given functionality. Include: Page Object Model implementation, data-driven test cases, cross-browser testing setup, explicit waits, error handling, reporting integration, and parallel execution configuration. Provide examples in Java/Python/C# with TestNG/JUnit/pytest frameworks.`,
+                    output: `<h4>Selenium Java TestNG Example:</h4>
+                    <pre><code>@Test(priority = 1, dataProvider = "loginData")
+public void testUserLogin(String username, String password, String expectedResult) {
+    LoginPage loginPage = new LoginPage(driver);
+    loginPage.enterUsername(username);
+    loginPage.enterPassword(password);
+    loginPage.clickLoginButton();
+    
+    if (expectedResult.equals("success")) {
+        Assert.assertTrue(loginPage.isLoginSuccessful());
+    } else {
+        Assert.assertTrue(loginPage.isErrorMessageDisplayed());
+    }
+}
+
+@DataProvider(name = "loginData")
+public Object[][] getLoginData() {
+    return new Object[][] {
+        {"valid@email.com", "validPassword", "success"},
+        {"invalid@email.com", "wrongPassword", "error"},
+        {"", "", "error"}
+    };
+}</code></pre>
+                    <h4>Page Object Model Implementation:</h4>
+                    <pre><code>public class LoginPage {
+    private WebDriver driver;
+    
+    @FindBy(id = "email")
+    private WebElement emailField;
+    
+    @FindBy(id = "password")
+    private WebElement passwordField;
+    
+    @FindBy(id = "loginBtn")
+    private WebElement loginButton;
+    
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+    
+    public void enterUsername(String username) {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(emailField));
+        emailField.clear();
+        emailField.sendKeys(username);
+    }
+}</code></pre>`
+                },
+                'Cypress Test Suite': {
+                    text: `You are a modern test automation engineer using Cypress. Create comprehensive E2E test suites with: Custom commands, API testing integration, visual regression testing, mobile responsiveness tests, accessibility testing, CI/CD pipeline integration, and advanced reporting. Include examples of fixtures, mocking, and intercepts.`,
+                    output: `<h4>Cypress E2E Test Suite:</h4>
+                    <pre><code>describe('User Authentication Flow', () => {
+  beforeEach(() => {
+    cy.visit('/login');
+    cy.intercept('POST', '/api/login', { fixture: 'loginResponse.json' }).as('loginRequest');
+  });
+
+  it('should successfully login with valid credentials', () => {
+    cy.get('[data-cy=email-input]').type('test@example.com');
+    cy.get('[data-cy=password-input]').type('password123');
+    cy.get('[data-cy=login-button]').click();
+    
+    cy.wait('@loginRequest');
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-cy=user-menu]').should('be.visible');
+  });
+
+  it('should display error for invalid credentials', () => {
+    cy.get('[data-cy=email-input]').type('invalid@example.com');
+    cy.get('[data-cy=password-input]').type('wrongpassword');
+    cy.get('[data-cy=login-button]').click();
+    
+    cy.get('[data-cy=error-message]').should('contain', 'Invalid credentials');
+  });
+});</code></pre>
+                    <h4>Custom Commands:</h4>
+                    <pre><code>Cypress.Commands.add('login', (email, password) => {
+  cy.request({
+    method: 'POST',
+    url: '/api/login',
+    body: { email, password }
+  }).then((response) => {
+    window.localStorage.setItem('authToken', response.body.token);
+  });
+});
+
+Cypress.Commands.add('checkAccessibility', () => {
+  cy.injectAxe();
+  cy.checkA11y();
+});</code></pre>`
+                },
+                'API Test Framework': {
+                    text: `You are an API test automation specialist. Create comprehensive API testing framework with: REST/GraphQL testing, authentication handling, data validation, contract testing, performance testing integration, mock services, and CI/CD pipeline integration. Include examples using RestAssured, Postman/Newman, or Playwright API testing.`,
+                    output: `<h4>RestAssured API Test Framework:</h4>
+                    <pre><code>@Test
+public void testUserLogin() {
+    LoginRequest loginRequest = new LoginRequest("test@example.com", "password123");
+    
+    Response response = given()
+        .contentType(ContentType.JSON)
+        .body(loginRequest)
+        .when()
+        .post("/api/login")
+        .then()
+        .statusCode(200)
+        .extract().response();
+    
+    LoginResponse loginResponse = response.as(LoginResponse.class);
+    Assert.assertNotNull(loginResponse.getToken());
+    Assert.assertEquals("success", loginResponse.getStatus());
+}
+
+@Test
+public void testInvalidLogin() {
+    LoginRequest loginRequest = new LoginRequest("invalid@email.com", "wrongpassword");
+    
+    given()
+        .contentType(ContentType.JSON)
+        .body(loginRequest)
+        .when()
+        .post("/api/login")
+        .then()
+        .statusCode(401)
+        .body("message", equalTo("Invalid credentials"))
+        .body("status", equalTo("error"));
+}</code></pre>
+                    <h4>Contract Testing with Pact:</h4>
+                    <pre><code>@Pact(consumer = "login-frontend", provider = "user-service")
+public RequestResponsePact loginPact(PactDslWithProvider builder) {
+    return builder
+        .given("user exists")
+        .uponReceiving("valid login request")
+        .path("/api/login")
+        .method("POST")
+        .body(new PactDslJsonBody()
+            .stringType("email", "test@example.com")
+            .stringType("password", "password123"))
+        .willRespondWith()
+        .status(200)
+        .body(new PactDslJsonBody()
+            .stringType("token")
+            .stringType("status", "success"))
+        .toPact();
+}</code></pre>`
+                }
+            },
+            performance: {
+                'Load Testing Strategy': {
+                    text: `You are a performance testing specialist. Create comprehensive load testing strategy including: Performance requirements definition, test scenarios design, load patterns (ramp-up, steady-state, spike), monitoring strategy, baseline establishment, bottleneck identification, and reporting framework. Include JMeter/LoadRunner/K6 implementation examples.`,
+                    output: `<table>
+                        <tr><th>Test Scenario</th><th>Load Pattern</th><th>Duration</th><th>Success Criteria</th><th>Monitoring Points</th></tr>
+                        <tr><td>Normal Load Test</td><td>100 concurrent users</td><td>30 minutes</td><td>Response time < 2s, Error rate < 1%</td><td>CPU, Memory, Database connections</td></tr>
+                        <tr><td>Stress Test</td><td>500 concurrent users</td><td>15 minutes</td><td>System recovers gracefully</td><td>Error rates, Resource utilization</td></tr>
+                        <tr><td>Spike Test</td><td>50 to 300 users in 1 minute</td><td>10 minutes</td><td>No system crash, Auto-scaling works</td><td>Response time degradation</td></tr>
+                        <tr><td>Volume Test</td><td>1000 concurrent users</td><td>60 minutes</td><td>System handles peak load</td><td>Database performance, Memory leaks</td></tr>
+                        <tr><td>Endurance Test</td><td>200 concurrent users</td><td>4 hours</td><td>No memory leaks, Stable performance</td><td>Memory usage trends, Connection pools</td></tr>
+                    </table>
+                    <h4>JMeter Test Plan Configuration:</h4>
+                    <pre><code>Thread Group Configuration:
+- Number of Threads: 100
+- Ramp-up Period: 300 seconds
+- Loop Count: Infinite
+- Duration: 1800 seconds
+
+HTTP Request Defaults:
+- Server: api.example.com
+- Port: 443
+- Protocol: https
+
+Assertions:
+- Response time < 2000ms
+- Response code = 200
+- JSON response validation
+
+Listeners:
+- Aggregate Report
+- View Results Tree
+- Backend Listener (InfluxDB/Grafana)</code></pre>`
+                },
+                'Performance Test Scripts': {
+                    text: `You are a performance engineer creating automated performance test scripts. Generate comprehensive performance test scripts using JMeter, K6, or LoadRunner. Include: realistic user scenarios, parameterization, correlation handling, think time simulation, ramp-up strategies, and result analysis. Provide examples for web applications, APIs, and database performance testing.`,
+                    output: `<h4>K6 Performance Test Script:</h4>
+                    <pre><code>import http from 'k6/http';
+import { check, sleep } from 'k6';
+import { Rate } from 'k6/metrics';
+
+const errorRate = new Rate('errors');
+
+export let options = {
+  stages: [
+    { duration: '2m', target: 100 },
+    { duration: '5m', target: 100 },
+    { duration: '2m', target: 200 },
+    { duration: '5m', target: 200 },
+    { duration: '2m', target: 0 },
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)<2000'],
+    errors: ['rate<0.01'],
+  },
+};
+
+export default function() {
+  let loginPayload = JSON.stringify({
+    email: 'test@example.com',
+    password: 'password123'
+  });
+
+  let params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  let loginResponse = http.post('https://api.example.com/login', loginPayload, params);
+  
+  check(loginResponse, {
+    'login status is 200': (r) => r.status === 200,
+    'login response time < 2000ms': (r) => r.timings.duration < 2000,
+    'token received': (r) => r.json('token') !== null,
+  }) || errorRate.add(1);
+
+  sleep(1);
+}</code></pre>
+                    <h4>JMeter Performance Test Plan:</h4>
+                    <pre><code>Test Plan Structure:
+├── Thread Group (Load Pattern)
+│   ├── CSV Data Set Config (Test Data)
+│   ├── HTTP Cookie Manager
+│   ├── HTTP Request Defaults
+│   └── User Scenarios
+│       ├── Login Request
+│       ├── Dashboard Request
+│       └── Logout Request
+├── Listeners
+│   ├── Aggregate Report
+│   ├── Response Time Graph
+│   └── Backend Listener (Grafana)
+└── Assertions
+    ├── Response Time Assertion
+    ├── JSON Assertion
+    └── Size Assertion</code></pre>`
+                },
+                'Performance Analysis': {
+                    text: `You are a performance analyst interpreting test results. Create comprehensive performance analysis reports including: response time analysis, throughput analysis, error rate evaluation, resource utilization assessment, bottleneck identification, scalability assessment, and optimization recommendations. Include graphs, charts, and actionable insights.`,
+                    output: `<table>
+                        <tr><th>Metric</th><th>Baseline</th><th>Current</th><th>Threshold</th><th>Status</th><th>Recommendation</th></tr>
+                        <tr><td>Average Response Time</td><td>800ms</td><td>1200ms</td><td>< 2000ms</td><td>⚠️ Warning</td><td>Optimize database queries</td></tr>
+                        <tr><td>95th Percentile</td><td>1500ms</td><td>2800ms</td><td>< 3000ms</td><td>⚠️ Warning</td><td>Review slow transactions</td></tr>
+                        <tr><td>Throughput</td><td>150 TPS</td><td>120 TPS</td><td>> 100 TPS</td><td>✅ Pass</td><td>Monitor during peak hours</td></tr>
+                        <tr><td>Error Rate</td><td>0.5%</td><td>0.8%</td><td>< 1%</td><td>✅ Pass</td><td>N/A</td></tr>
+                        <tr><td>CPU Utilization</td><td>60%</td><td>85%</td><td>< 90%</td><td>⚠️ Warning</td><td>Consider horizontal scaling for application servers</td></tr>
+                        <tr><td>Memory Usage</td><td>70%</td><td>75%</td><td>< 85%</td><td>✅ Pass</td><td>N/A</td></tr>
+                    </table>
+                    <h4>Optimization Recommendations:</h4>
+                    <ul>
+                        <li>**Database Optimization:** Implement indexing for frequently accessed tables and review complex joins.</li>
+                        <li>**Code Refactoring:** Analyze and refactor inefficient code sections identified during profiling.</li>
+                        <li>**Caching Strategy:** Implement caching mechanisms for static content and frequently retrieved data.</li>
+                        <li>**Load Balancer Tuning:** Optimize load balancer configuration for better distribution of requests.</li>
+                    </ul>`
+                }
+            },
+            security: {
+                'OWASP Top 10 Test Cases': {
+                    text: `You are a security test engineer. For a given web application or API, generate test cases covering the OWASP Top 10 vulnerabilities. Include specific steps, expected results, and potential tools for each vulnerability (e.g., SQL Injection, XSS, Broken Authentication, Sensitive Data Exposure).`,
+                    output: `<table>
+                        <tr><th>OWASP Vulnerability</th><th>Test Scenario</th><th>Test Steps</th><th>Expected Results</th><th>Tools</th></tr>
+                        <tr><td>A01: Broken Access Control</td><td>Verify unauthorized access to admin functionalities</td><td>1. Log in as a regular user.<br>2. Try to access admin URL/API endpoints directly.<br>3. Attempt to modify data belonging to other users.</td><td>Access denied; "Unauthorized" error.</td><td>Burp Suite, OWASP ZAP</td></tr>
+                        <tr><td>A02: Cryptographic Failures</td><td>Check for sensitive data exposure through weak encryption</td><td>1. Intercept traffic with proxy.<br>2. Identify sensitive data (e.g., passwords, PII) in transit.<br>3. Check if sensitive data is encrypted/hashed properly.</td><td>Sensitive data is encrypted with strong algorithms.</td><td>Burp Suite, Wireshark</td></tr>
+                        <tr><td>A03: Injection (SQL)</td><td>Test for SQL injection vulnerabilities in login fields</td><td>1. Enter ' OR 1=1-- into username/password field.<br>2. Submit form.</td><td>Login fails, no unexpected data returned.</td><td>OWASP ZAP, SQLMap</td></tr>
+                        <tr><td>A04: Insecure Design</td><td>Review authentication bypass scenarios</td><td>1. Attempt to bypass MFA.<br>2. Test predictable session IDs.<br>3. Attempt to register with existing credentials.</td><td>MFA cannot be bypassed. Session IDs are random. Registration fails.</td><td>Manual review, Burp Suite</td></tr>
+                    </table>`
+                },
+                'Penetration Testing Scope': {
+                    text: `You are a penetration testing lead. Define the scope for a penetration test. Include: Objectives, Target Systems (IP ranges, domains, applications), Test Types (Black Box, White Box, Grey Box), Attack Vectors to focus on, Exclusions, Legal Considerations, and Reporting Requirements.`,
+                    output: `<h4>Penetration Testing Scope Document:</h4>
+                    <ul>
+                        <li>**Objectives:** Identify critical security vulnerabilities, assess the overall security posture, ensure compliance with [relevant standards, e.g., PCI DSS, GDPR].</li>
+                        <li>**Target Systems:**
+                            <ul>
+                                <li>Web Application: https://app.example.com</li>
+                                <li>API Endpoints: api.example.com (all subdomains)</li>
+                                <li>IP Range: 192.168.1.0/24 (staging environment)</li>
+                            </ul>
+                        </li>
+                        <li>**Test Type:** Grey Box (limited internal documentation provided).</li>
+                        <li>**Attack Vectors:** Web application vulnerabilities (OWASP Top 10), API security, authentication mechanisms, session management, data exposure.</li>
+                        <li>**Exclusions:** Public facing marketing website, third-party integrations (e.g., payment gateways).</li>
+                        <li>**Legal Considerations:** Signed Statement of Work (SOW) and Non-Disclosure Agreement (NDA) in place. No social engineering.</li>
+                        <li>**Reporting:** Executive summary, technical report with reproducible steps, risk ratings (CVSS), and recommendations.</li>
+                    </ul>`
+                },
+                'Security Risk Assessment': {
+                    text: `You are a security analyst conducting a risk assessment. For a given system/feature, identify potential security risks, assess their likelihood and impact, and recommend mitigation strategies. Use a risk matrix (e.g., Likelihood x Impact) to prioritize risks.`,
+                    output: `<table>
+                        <tr><th>Risk ID</th><th>Description</th><th>Likelihood</th><th>Impact</th><th>Risk Level</th><th>Mitigation Strategy</th></tr>
+                        <tr><td>SR-001</td><td>SQL Injection vulnerability in user search functionality</td><td>High</td><td>High</td><td>Critical</td><td>Implement parameterized queries; Input validation; Web Application Firewall (WAF)</td></tr>
+                        <tr><td>SR-002</td><td>Broken Authentication allowing brute-force attacks</td><td>Medium</td><td>High</td><td>High</td><td>Implement account lockout; Multi-Factor Authentication (MFA); CAPTCHA</td></tr>
+                        <tr><td>SR-003</td><td>Sensitive data exposure through insecure API endpoint</td><td>Medium</td><td>High</td><td>High</td><td>Encrypt sensitive data at rest and in transit; Implement strict access control for API; Rate limiting</td></tr>
+                        <tr><td>SR-004</td><td>Cross-Site Scripting (XSS) in comment section</td><td>Medium</td><td>Medium</td><td>Medium</td><td>Implement output encoding; Content Security Policy (CSP)</td></tr>
+                        <tr><td>SR-005</td><td>Insecure direct object references (IDOR)</td><td>Low</td><td>High</td><td>Medium</td><td>Implement robust authorization checks at the server-side for all resource access</td></tr>
+                    </table>`
+                }
+            },
+            api: {
+                'REST API Test Cases': {
+                    text: `You are a QA engineer testing a RESTful API. Generate comprehensive test cases for a given API endpoint (e.g., /users/{id}). Include test cases for: valid requests (GET, POST, PUT, DELETE), invalid inputs, authentication/authorization, error handling (status codes 4xx, 5xx), data validation, pagination, filtering, and performance considerations.`,
+                    output: `<table>
+                        <tr><th>Test Case ID</th><th>Endpoint/Method</th><th>Test Scenario</th><th>Request Payload/Params</th><th>Expected Status Code</th><th>Expected Response Body/Validation</th></tr>
+                        <tr><td>API_GET_001</td><td>GET /users/{id}</td><td>Retrieve valid user by ID</td><td>id: 123</td><td>200 OK</td><td>Returns user object with ID 123</td></tr>
+                        <tr><td>API_GET_002</td><td>GET /users/{id}</td><td>Retrieve non-existent user</td><td>id: 99999</td><td>404 Not Found</td><td>Error message: "User not found"</td></tr>
+                        <tr><td>API_POST_001</td><td>POST /users</td><td>Create new user with valid data</td><td>{"name": "John Doe", "email": "john.doe@example.com"}</td><td>201 Created</td><td>Returns new user object with generated ID</td></tr>
+                        <tr><td>API_POST_002</td><td>POST /users</td><td>Create user with missing required field</td><td>{"name": "Jane Doe"}</td><td>400 Bad Request</td><td>Error message: "Email is required"</td></tr>
+                        <tr><td>API_PUT_001</td><td>PUT /users/{id}</td><td>Update existing user with valid data</td><td>id: 123, {"name": "John D. updated"}</td><td>200 OK</td><td>User name updated successfully</td></tr>
+                        <tr><td>API_DEL_001</td><td>DELETE /users/{id}</td><td>Delete existing user</td><td>id: 123</td><td>204 No Content</td><td>User with ID 123 is deleted</td></tr>
+                        <tr><td>API_AUTH_001</td><td>GET /users</td><td>Access protected endpoint without authentication</td><td>(No Authorization header)</td><td>401 Unauthorized</td><td>Error message: "Authentication required"</td></tr>
+                    </table>`
+                },
+                'GraphQL API Test Strategy': {
+                    text: `You are a QA architect specializing in GraphQL API testing. Develop a comprehensive test strategy for a GraphQL API. Include: Query testing, Mutation testing, Subscription testing, schema validation, error handling, performance testing, security testing, and integration with mocking/contract testing tools.`,
+                    output: `<h4>GraphQL API Test Strategy:</h4>
+                    <ul>
+                        <li>**Query Testing:**
+                            <ul>
+                                <li>Validate all defined queries with valid and invalid arguments.</li>
+                                <li>Test nested queries and fragments to ensure data integrity.</li>
+                                <li>Verify data types, nullability, and aliases.</li>
+                            </ul>
+                        </li>
+                        <li>**Mutation Testing:**
+                            <ul>
+                                <li>Test all mutations for creation, update, and deletion operations.</li>
+                                <li>Verify input validation and error handling for invalid payloads.</li>
+                                <li>Ensure correct state changes after mutations.</li>
+                            </ul>
+                        </li>
+                        <li>**Subscription Testing:**
+                            <ul>
+                                <li>Test real-time data updates via subscriptions.</li>
+                                <li>Verify connection stability and message delivery.</li>
+                            </ul>
+                        </li>
+                        <li>**Schema Validation:**
+                            <ul>
+                                <li>Automate schema comparison against a golden schema.</li>
+                                <li>Ensure backward compatibility for schema changes.</li>
+                            </ul>
+                        </li>
+                        <li>**Error Handling:**
+                            <ul>
+                                <li>Test various error scenarios (e.g., syntax errors, validation errors, server errors).</li>
+                                <li>Validate error messages and codes.</li>
+                            </ul>
+                        </li>
+                        <li>**Performance Testing:**
+                            <ul>
+                                <li>Measure query response times under load (e.g., complex nested queries).</li>
+                                <li>Test DataLoader efficiency.</li>
+                            </ul>
+                        </li>
+                        <li>**Security Testing:**
+                            <ul>
+                                <li>Test for Injection, Broken Access Control, Rate Limiting.</li>
+                                <li>Verify proper authorization checks for fields and arguments.</li>
+                            </ul>
+                        </li>
+                        <li>**Tools:** Postman, GraphQL Playground, Apollo Client Developer Tools, Pact (for contract testing).</li>
+                    </ul>`
+                },
+                'Microservices API Integration Testing': {
+                    text: `You are a QA lead designing integration tests for a microservices architecture. Outline a strategy and provide sample test cases for ensuring seamless interaction between microservices APIs. Focus on: data flow validation, error propagation, contract testing, service virtualization, and end-to-end transaction verification.`,
+                    output: `<h4>Microservices API Integration Test Strategy:</h4>
+                    <ul>
+                        <li>**Data Flow Validation:** Trace critical data elements across multiple services to ensure correct transformation and persistence.</li>
+                        <li>**Error Propagation:** Validate how errors are handled and communicated between services (e.g., a failure in Service A is correctly handled by Service B and reported to the client).</li>
+                        <li>**Contract Testing:** Implement consumer-driven contract tests (e.g., using Pact) to ensure API compatibility between consumer and provider services.</li>
+                        <li>**Service Virtualization/Mocking:** Utilize tools like WireMock or Mockito to simulate dependencies that are unavailable or unstable during testing.</li>
+                        <li>**End-to-End Transaction Verification:** Design test scenarios that simulate complete business workflows spanning multiple microservices.</li>
+                        <li>**Tools:** Postman Collections, RestAssured, Spring Cloud Contract, WireMock, Kubernetes (for deployment testing).</li>
+                    </ul>
+                    <h4>Sample Integration Test Cases:</h4>
+                    <table>
+                        <tr><th>Test Case ID</th><th>Scenario</th><th>Services Involved</th><th>Test Steps</th><th>Expected Outcome</th></tr>
+                        <tr><td>INT_001</td><td>User Registration to Order Creation</td><td>User Service, Order Service, Notification Service</td><td>1. Create new user via User Service API.<br>2. Create an order for the new user via Order Service API.<br>3. Verify notification received via Notification Service mock.</td><td>User and Order created; Notification service invoked successfully.</td></tr>
+                        <tr><td>INT_002</td><td>Product Inventory Update & Availability</td><td>Product Service, Inventory Service</td><td>1. Query Product Service for product availability.<br>2. Update inventory via Inventory Service API.<br>3. Re-query Product Service to confirm updated availability.</td><td>Product availability reflects inventory change correctly.</td></tr>
+                        <tr><td>INT_003</td><td>Invalid Payment Gateway Response Handling</td><td>Order Service, Payment Gateway (Mock)</td><td>1. Initiate order with payment (mocked to fail).<br>2. Verify Order Service handles payment failure gracefully.</td><td>Order status set to "Payment Failed"; User receives appropriate error.</td></tr>
+                    </table>`
+                }
+            },
+            mobile: {
+                'Android App Test Cases': {
+                    text: `You are a mobile QA engineer. Generate comprehensive test cases for an Android application given a specific feature (e.g., User Profile Management). Include test cases for: functional validation, UI/UX (responsiveness, gestures), interruption handling, performance (startup, battery), security, and compatibility across different Android versions and device types.`,
+                    output: `<table>
+                        <tr><th>Test Case ID</th><th>Feature</th><th>Scenario</th><th>Steps</th><th>Expected Result</th><th>Device/OS</th><th>Priority</th></tr>
+                        <tr><td>MOB_AND_001</td><td>User Profile</td><td>Edit profile picture successfully</td><td>1. Navigate to Profile screen.<br>2. Tap on profile picture.<br>3. Select "Choose from Gallery".<br>4. Select an image.<br>5. Tap "Save".</td><td>Profile picture updates and displays correctly.</td><td>Android 12+, various resolutions</td><td>High</td></tr>
+                        <tr><td>MOB_AND_002</td><td>User Profile</td><td>Edit profile with invalid email format</td><td>1. Navigate to Profile screen.<br>2. Tap "Edit Profile".<br>3. Enter "invalid-email" in email field.<br>4. Tap "Save".</td><td>Error message "Invalid email format" displayed.</td><td>Android 10</td><td>Medium</td></tr>
+                        <tr><td>MOB_AND_003</td><td>Notifications</td><td>Receive push notification during a call</td><td>1. Log in to app.<br>2. Receive incoming call.<br>3. While on call, trigger a push notification.</td><td>Notification is received and displayed without interrupting the call or causing app crash.</td><td>Any Android phone</td><td>High</td></tr>
+                        <tr><td>MOB_AND_004</td><td>Performance</td><td>App startup time on low network</td><td>1. Set network to 2G/Edge.<br>2. Force close app.<br>3. Launch app.</td><td>App launches within acceptable time (e.g., < 5s) and displays loading indicator.</td><td>Older Android device, low RAM</td><td>Medium</td></tr>
+                    </table>`
+                },
+                'iOS App Test Strategy': {
+                    text: `You are a QA lead developing a test strategy for an iOS application. Outline a comprehensive strategy including: functional testing, UI/UX (Human Interface Guidelines adherence), performance (memory, battery, launch time), security, interruption testing, network condition testing, accessibility, and compatibility across iOS versions and Apple devices (iPhone, iPad).`,
+                    output: `<h4>iOS App Test Strategy:</h4>
+                    <ul>
+                        <li>**Functional Testing:**
+                            <ul>
+                                <li>Verify all features and workflows as per requirements.</li>
+                                <li>Focus on user story validation, positive and negative flows.</li>
+                            </ul>
+                        </li>
+                        <li>**UI/UX Testing:**
+                            <ul>
+                                <li>Adherence to Apple Human Interface Guidelines (HIG).</li>
+                                <li>Layout verification across different iPhone/iPad models and orientations.</li>
+                                <li>Gesture recognition (tap, swipe, pinch-zoom).</li>
+                            </ul>
+                        </li>
+                        <li>**Performance Testing:**
+                            <ul>
+                                <li>**Launch Time:** Measure app startup duration.</li>
+                                <li>**Memory Usage:** Monitor memory consumption to prevent crashes.</li>
+                                <li>**Battery Consumption:** Assess impact on device battery life during prolonged use.</li>
+                                <li>**Responsiveness:** Check UI fluidity and responsiveness during interactions.</li>
+                            </ul>
+                        </li>
+                        <li>**Security Testing:**
+                            <ul>
+                                <li>Data storage security (Keychain, UserDefaults).</li>
+                                <li>Network communication security (HTTPS, SSL Pinning).</li>
+                                <li>Jailbreak detection, code tampering.</li>
+                            </ul>
+                        </li>
+                        <li>**Interruption Testing:**
+                            <ul>
+                                <li>Incoming calls, SMS, notifications, device lock/unlock, background/foreground transitions.</li>
+                            </ul>
+                        </li>
+                        <li>**Network Condition Testing:**
+                            <ul>
+                                <li>Test app behavior on 2G, 3G, 4G, 5G, Wi-Fi, and no network conditions.</li>
+                                <li>Offline capabilities and data synchronization.</li>
+                            </ul>
+                        </li>
+                        <li>**Accessibility Testing:**
+                            <ul>
+                                <li>VoiceOver, Dynamic Type, Dark Mode, Reduced Motion support.</li>
+                            </ul>
+                        </li>
+                        <li>**Compatibility Testing:**
+                            <ul>
+                                <li>Across major iOS versions (e.g., iOS 15, 16, 17).</li>
+                                <li>On various iPhone and iPad models (physical devices and simulators).</li>
+                            </ul>
+                        </li>
+                        <li>**Automation Tools:** XCUITest, Appium, EarlGrey.</li>
+                    </ul>`
+                },
+                'Mobile Automation Framework': {
+                    text: `You are a mobile automation engineer. Design an automation framework for mobile applications (Android/iOS) using Appium or XCUITest/Espresso. Include: framework architecture, test data management, reporting, CI/CD integration, parallel execution, and strategy for handling different device resolutions and OS versions. Provide sample code structure.`,
+                    output: `<h4>Appium Mobile Automation Framework (Java Example):</h4>
+<pre><code>src/
+├── main/
+│   └── java/
+│       └── com/example/mobile/
+│           ├── pages/
+│           │   └── LoginPage.java
+│           └── utils/
+│               └── DriverFactory.java
+└── test/
+    └── java/
+        └── com/example/mobile/
+            └── tests/
+                └── LoginTest.java
+</code></pre>
+<h4>LoginPage.java:</h4>
+<pre><code>package com.example.mobile.pages;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class LoginPage {
+    private AppiumDriver<MobileElement> driver;
+
+    @AndroidFindBy(id = "com.example.app:id/username_input")
+    @iOSXCUITFindBy(accessibility = "username_input")
+    private MobileElement usernameField;
+
+    @AndroidFindBy(id = "com.example.app:id/password_input")
+    @iOSXCUITFindBy(accessibility = "password_input")
+    private MobileElement passwordField;
+
+    @AndroidFindBy(id = "com.example.app:id/login_button")
+    @iOSXCUITFindBy(accessibility = "login_button")
+    private MobileElement loginButton;
+
+    public LoginPage(AppiumDriver<MobileElement> driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+    public void enterUsername(String username) {
+        usernameField.clear();
+        usernameField.sendKeys(username);
+    }
+
+    public void enterPassword(String password) {
+        passwordField.clear();
+        passwordField.sendKeys(password);
+    }
+
+    public void clickLogin() {
+        loginButton.click();
+    }
+}
+</code></pre>
+<h4>DriverFactory.java (Setup):</h4>
+<pre><code>package com.example.mobile.utils;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.net.URL;
+
+public class DriverFactory {
+    public static AppiumDriver<MobileElement> getAndroidDriver() throws Exception {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability("platformName", "Android");
+        caps.setCapability("platformVersion", "11");
+        caps.setCapability("deviceName", "emulator-5554");
+        caps.setCapability("appPackage", "com.example.app");
+        caps.setCapability("appActivity", "com.example.app.MainActivity");
+        caps.setCapability("automationName", "UiAutomator2");
+        return new AndroidDriver<>(new URL("http://localhost:4723/wd/hub"), caps);
+    }
+
+    public static AppiumDriver<MobileElement> getIOSDriver() throws Exception {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability("platformName", "iOS");
+        caps.setCapability("platformVersion", "15.0");
+        caps.setCapability("deviceName", "iPhone 13 Pro Max");
+        caps.setCapability("app", "/path/to/your/app.ipa");
+        caps.setCapability("automationName", "XCUITest");
+        return new IOSDriver<>(new URL("http://localhost:4723/wd/hub"), caps);
+    }
+}
+</code></pre>`
+                },
+            },
+            database: {
+                'SQL Test Cases': {
+                    text: `You are a QA engineer specializing in database testing. Generate SQL test cases for a given database schema/feature (e.g., user registration, order processing). Include test cases for: data integrity (constraints, foreign keys), data validation (data types, formats), CRUD operations, performance of complex queries, and security (SQL injection prevention).`,
+                    output: `<table>
+                        <tr><th>Test Case ID</th><th>Scenario</th><th>SQL Query/Operation</th><th>Expected Result</th><th>Notes</th></tr>
+                        <tr><td>DB_USER_001</td><td>Verify successful user insertion</td><td>INSERT INTO Users (id, name, email, password_hash) VALUES (1, 'John Doe', 'john@example.com', 'hashed_password');<br>SELECT * FROM Users WHERE id = 1;</td><td>User record with ID 1 exists and matches inserted data.</td><td>Positive test for CREATE</td></tr>
+                        <tr><td>DB_USER_002</td><td>Verify duplicate email constraint</td><td>INSERT INTO Users (id, name, email, password_hash) VALUES (2, 'Jane Doe', 'john@example.com', 'another_hash');</td><td>SQL Error: Duplicate entry for 'email' key.</td><td>Negative test for unique constraint</td></tr>
+                        <tr><td>DB_ORDER_001</td><td>Verify order creation and associated items</td><td>INSERT INTO Orders (order_id, user_id, order_date) VALUES (101, 1, NOW());<br>INSERT INTO OrderItems (item_id, order_id, product_id, quantity) VALUES (1, 101, 501, 2);<br>SELECT o.order_id, oi.product_id, oi.quantity FROM Orders o JOIN OrderItems oi ON o.order_id = oi.order_id WHERE o.order_id = 101;</td><td>Order and OrderItems records exist and are correctly linked.</td><td>CRUD - CREATE & READ</td></tr>
+                        <tr><td>DB_PERF_001</td><td>Performance of large data retrieval</td><td>SELECT * FROM Transactions WHERE transaction_date BETWEEN '2023-01-01' AND '2023-12-31' ORDER BY amount DESC LIMIT 10000;</td><td>Query completes within acceptable time (e.g., < 5s).</td><td>Performance test; check indexing.</td></tr>
+                    </table>`
+                },
+                'Database Migration Testing': {
+                    text: `You are a database QA specialist. Develop a test plan for database schema migrations. Include: forward migration testing, backward migration testing, data integrity checks post-migration, performance impact assessment, and rollback procedures.`,
+                    output: `<h4>Database Migration Test Plan:</h4>
+                    <ul>
+                        <li>**Objectives:** Ensure successful and reversible database schema migrations without data loss or corruption, and verify application compatibility with new/old schemas.</li>
+                        <li>**Scope:** Schema changes for Feature X (e.g., adding a new column, modifying a table, dropping an index).</li>
+                        <li>**Test Environment:** Isolated staging environment, production-like data snapshot.</li>
+                        <li>**Test Types:**
+                            <ul>
+                                <li>**Forward Migration Testing:**
+                                    <ul>
+                                        <li>Apply migration script to current production schema.</li>
+                                        <li>Verify schema changes are correctly applied.</li>
+                                        <li>Perform data integrity checks (e.g., constraint validation, null values, data transformation).</li>
+                                        <li>Execute application's functional and integration tests against new schema.</li>
+                                    </ul>
+                                </li>
+                                <li>**Backward Migration (Rollback) Testing:**
+                                    <ul>
+                                        <li>Apply rollback script to the migrated schema.</li>
+                                        <li>Verify schema reverts to previous state.</li>
+                                        <li>Ensure no data loss or corruption during rollback.</li>
+                                        <li>Execute application's functional/integration tests against the rolled-back schema.</li>
+                                    </ul>
+                                </li>
+                                <li>**Data Integrity and Consistency:**
+                                    <ul>
+                                        <li>Verify data consistency before and after migration using checksums or record counts.</li>
+                                        <li>Check data types, lengths, and constraints.</li>
+                                    </ul>
+                                </li>
+                                <li>**Performance Impact Assessment:**
+                                    <ul>
+                                        <li>Run performance tests (e.g., for frequently used queries) against the new schema to ensure no degradation.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>**Risk Analysis:** Potential data loss, application downtime, performance degradation.</li>
+                        <li>**Tools:** Flyway, Liquibase, database diff tools, custom SQL scripts.</li>
+                    </ul>`
+                }
+            },
+            cloud: {
+                'AWS Cloud Testing Strategy': {
+                    text: `You are a cloud QA architect. Develop a comprehensive testing strategy for an application deployed on AWS. Include: Infrastructure as Code (IaC) testing, microservices testing (Lambda, ECS), data storage testing (S3, DynamoDB), security configurations, performance/scalability (Auto Scaling, Load Balancers), and monitoring/logging integration.`,
+                    output: `<h4>AWS Cloud Testing Strategy:</h4>
+                    <ul>
+                        <li>**Infrastructure as Code (IaC) Testing:**
+                            <ul>
+                                <li>Validate CloudFormation/Terraform templates for correctness, security, and resource provisioning.</li>
+                                <li>Use tools like <code>cfn-lint</code>, <code>terraform validate</code>.</li>
+                            </ul>
+                        </li>
+                        <li>**Microservices Testing (Lambda, ECS/EKS):**
+                            <ul>
+                                <li>Unit, integration, and end-to-end testing of individual serverless functions (Lambda) and containerized services (ECS/EKS).</li>
+                                <li>Focus on API contract testing and event-driven architectures.</li>
+                            </ul>
+                        </li>
+                        <li>**Data Storage Testing (S3, DynamoDB, RDS):**
+                            <ul>
+                                <li>Data integrity, consistency, and availability for S3 buckets, DynamoDB tables, and RDS databases.</li>
+                                <li>Permissions and access control testing.</li>
+                            </ul>
+                        </li>
+                        <li>**Security Configuration Testing:**
+                            <ul>
+                                <li>Verify IAM roles/policies, Security Groups, Network ACLs, and WAF rules.</li>
+                                <li>Penetration testing and vulnerability scanning (e.g., with AWS Inspector).</li>
+                            </ul>
+                        </li>
+                        <li>**Performance & Scalability Testing:**
+                            <ul>
+                                <li>Test Auto Scaling Group configurations and load balancer distribution.</li>
+                                <li>Assess performance under peak load and resilience to traffic spikes.</li>
+                                <li>Stress test services for graceful degradation.</li>
+                            </ul>
+                        </li>
+                        <li>**Monitoring & Logging Integration:**
+                            <ul>
+                                <li>Verify CloudWatch alarms, logs, and metrics are correctly configured and reporting expected data.</li>
+                                <li>Ensure traceability of transactions across services.</li>
+                            </ul>
+                        </li>
+                        <li>**Disaster Recovery & Resilience:**
+                            <ul>
+                                <li>Test multi-AZ/multi-region deployments, backup/restore procedures.</li>
+                                <li>Chaos engineering (e.g., with AWS Fault Injection Simulator).</li>
+                            </ul>
+                        </li>
+                        <li>**Tools:** LocalStack, Testcontainers, K6, JMeter, AWS CLI, Prowler.</li>
+                    </ul>`
+                },
+                'Azure Cloud Testing Checklist': {
+                    text: `You are a QA engineer working with Azure deployments. Create a comprehensive testing checklist for an application deployed on Microsoft Azure. Include: Azure App Service, Azure Functions, Azure SQL Database, Azure Storage, Azure DevOps Pipelines, and Azure Security Center.`,
+                    output: `<h4>Azure Cloud Testing Checklist:</h4>
+                    <ul>
+                        <li>**Azure App Service:**
+                            <ul>
+                                <li>[ ] Verify deployment success and application availability.</li>
+                                <li>[ ] Test routing and custom domains.</li>
+                                <li>[ ] Check autoscaling configurations under load.</li>
+                                <li>[ ] Validate environment variables and connection strings.</li>
+                            </ul>
+                        </li>
+                        <li>**Azure Functions:**
+                            <ul>
+                                <li>[ ] Test individual function triggers (HTTP, Timer, Queue, Blob).</li>
+                                <li>[ ] Validate input/output bindings.</li>
+                                <li>[ ] Ensure proper error handling and logging (Application Insights).</li>
+                                <li>[ ] Assess cold start performance.</li>
+                            </ul>
+                        </li>
+                        <li>**Azure SQL Database:**
+                            <ul>
+                                <li>[ ] Verify database connectivity from application.</li>
+                                <li>[ ] Test data integrity, CRUD operations.</li>
+                                <li>[ ] Check performance of critical queries.</li>
+                                <li>[ ] Validate backup and restore configurations.</li>
+                            </ul>
+                        </li>
+                        <li>**Azure Storage (Blob, Table, Queue):**
+                            <ul>
+                                <li>[ ] Test read/write operations for Blobs.</li>
+                                <li>[ ] Verify data consistency in Table storage.</li>
+                                <li>[ ] Test message queuing/dequeuing in Queue storage.</li>
+                                <li>[ ] Validate access policies (SAS tokens, RBAC).</li>
+                            </ul>
+                        </li>
+                        <li>**Azure DevOps Pipelines:**
+                            <ul>
+                                <li>[ ] Verify CI/CD pipeline triggers and stages (build, test, deploy).</li>
+                                <li>[ ] Ensure automated tests are executed correctly within the pipeline.</li>
+                                <li>[ ] Validate deployment artifacts.</li>
+                            </ul>
+                        </li>
+                        <li>**Azure Security Center / Network:**
+                            <ul>
+                                <li>[ ] Review security recommendations in Azure Security Center.</li>
+                                <li>[ ] Validate Network Security Groups (NSG) and firewall rules.</li>
+                                <li>[ ] Test Virtual Network (VNet) peering and connectivity.</li>
+                            </ul>
+                        </li>
+                        <li>**Monitoring & Alerting:**
+                            <ul>
+                                <li>[ ] Verify Application Insights data collection and dashboards.</li>
+                                <li>[ ] Test Azure Monitor alerts for critical metrics.</li>
+                            </ul>
+                        </li>
+                    </ul>`
+                }
+            },
+            devops: {
+                'CI/CD Pipeline Testing Strategy': {
+                    text: `You are a DevOps QA engineer. Develop a comprehensive testing strategy for a CI/CD pipeline. Include: Unit test integration, static code analysis, integration testing in pipelines, end-to-end test execution, performance/security scanning, artifact validation, and deployment verification. Emphasize continuous quality and feedback loops.`,
+                    output: `<h4>CI/CD Pipeline Testing Strategy:</h4>
+                    <ul>
+                        <li>**Continuous Integration (CI) Phase:**
+                            <ul>
+                                <li>**Unit Test Execution:** Automatically run all unit tests on every code commit.</li>
+                                <li>**Static Code Analysis (SAST):** Integrate tools like SonarQube to identify code quality issues and security vulnerabilities early.</li>
+                                <li>**Linting/Formatting Checks:** Ensure code adheres to defined style guides.</li>
+                                <li>**Dependency Scanning:** Check for vulnerable libraries/dependencies.</li>
+                                <li>**Build Verification:** Confirm successful compilation and artifact generation.</li>
+                            </ul>
+                        </li>
+                        <li>**Continuous Delivery (CD) Phase:**
+                            <ul>
+                                <li>**Component/Integration Testing:** Execute API and service-level integration tests in a dedicated environment.</li>
+                                <li>**Contract Testing:** Run consumer-driven contract tests to validate service compatibility.</li>
+                                <li>**Automated UI Tests (Smoke/Regression):** Execute a subset of critical E2E tests in a staging environment.</li>
+                                <li>**Performance & Security Scans (DAST/SAST):** Run automated performance (e.g., basic load test) and dynamic security scans (e.g., OWASP ZAP scan against deployed app).</li>
+                                <li>**Artifact Validation:** Verify container images, package contents, and deployment manifests.</li>
+                                <li>**Environment Provisioning Tests:** Ensure infrastructure can be provisioned correctly.</li>
+                            </ul>
+                        </li>
+                        <li>**Deployment Phase:**
+                            <ul>
+                                <li>**Deployment Verification:** Health checks and post-deployment smoke tests on target environments.</li>
+                                <li>**Rollback Mechanism Testing:** Verify the ability to revert to a stable previous version if issues arise.</li>
+                            </ul>
+                        </li>
+                        <li>**Feedback Loops:**
+                            <ul>
+                                <li>Integrate test results and scan reports directly into the pipeline UI (e.g., Jenkins, GitLab, Azure DevOps).</li>
+                                <li>Automated notifications for build failures, test failures, or critical vulnerabilities.</li>
+                            </ul>
+                        </li>
+                        <li>**Tools:** Jenkins, GitLab CI, Azure DevOps Pipelines, Travis CI, CircleCI, SonarQube, Fortify, JMeter, Selenium, Cypress.</li>
+                    </ul>`
+                },
+                'Infrastructure as Code (IaC) Testing': {
+                    text: `You are a QA automation engineer specializing in IaC. Create a testing strategy and provide sample test cases for Infrastructure as Code (e.g., Terraform, CloudFormation, Ansible playbooks). Focus on: syntax validation, security best practices, idempotency, state validation, and integration with cloud provider APIs.`,
+                    output: `<h4>Infrastructure as Code (IaC) Testing Strategy:</h4>
+                    <ul>
+                        <li>**Syntax Validation:** Ensure IaC files are syntactically correct and adhere to language specifications. (e.g., <code>terraform validate</code>, <code>cfn-lint</code>).</li>
+                        <li>**Security Best Practices (Static Analysis):** Scan IaC for common security misconfigurations (e.g., open S3 buckets, overly permissive IAM policies). Tools: Checkov, Terrascan, tfsec.</li>
+                        <li>**Idempotency Testing:** Verify that applying the same IaC configuration multiple times produces the same desired state without unintended side effects.</li>
+                        <li>**State Validation:** After deployment, verify the actual cloud resources match the desired state defined in IaC. This often involves querying cloud APIs.</li>
+                        <li>**Integration with Cloud Provider APIs:** Test connectivity and permissions to interact with cloud resources.</li>
+                        <li>**Unit Testing IaC:** Test small, isolated modules of IaC (e.g., a single Terraform module for a VPC).</li>
+                        <li>**Integration Testing IaC:** Deploy and test the interaction between multiple IaC modules or components.</li>
+                        <li>**Rollback Testing:** Verify that changes made by IaC can be successfully reverted without leaving orphan resources or inconsistencies.</li>
+                    </ul>
+                    <h4>Sample IaC Test Cases (Terraform Example):</h4>
+                    <table>
+                        <tr><th>Test Case ID</th><th>Scenario</th><th>Tool/Method</th><th>Expected Result</th></tr>
+                        <tr><td>IAC_TF_001</td><td>Validate Terraform Syntax</td><td><code>terraform validate</code></td><td>No syntax errors, plan generated successfully.</td></tr>
+                        <tr><td>IAC_TF_002</td><td>Security Scan for S3 Bucket</td><td><code>checkov -f my_s3_bucket.tf</code></td><td>Reports no public S3 buckets.</td></tr>
+                        <tr><td>IAC_TF_003</td><td>Idempotency Test for EC2 instance</td><td>Apply <code>terraform apply</code> twice consecutively.</td><td>Second <code>terraform apply</code> shows no changes (or only minor, expected changes).</td></tr>
+                        <tr><td>IAC_TF_004</td><td>AWS API State Validation (EC2)</td><td>AWS CLI: <code>aws ec2 describe-instances --instance-ids &lt;instance_id&gt;</code></td><td>EC2 instance is running and matches specified type (e.g., t2.micro).</td></tr>
+                        <tr><td>IAC_TF_005</td><td>Module Unit Test (VPC)</td><td><code>terratest</code> (GoLang) or custom script</td><td>VPC created with correct CIDR, public/private subnets.</td></tr>
+                    </table>`
+                }
+            },
+            management: {
+                'Test Plan Review Checklist': {
+                    text: `You are a QA Manager. Create a comprehensive checklist for reviewing a Test Plan to ensure its completeness, accuracy, and alignment with project goals. Include aspects like scope, strategy, resources, risks, environment, and entry/exit criteria.`,
+                    output: `<h4>Test Plan Review Checklist:</h4>
+                    <ul>
+                        <li>**General Information:**
+                            <ul>
+                                <li>[ ] Project Name, Document Version, Author, Approval Signatures.</li>
+                                <li>[ ] Date of creation/last update.</li>
+                            </ul>
+                        </li>
+                        <li>**Introduction & Objectives:**
+                            <ul>
+                                <li>[ ] Is the purpose of testing clearly stated?</li>
+                                <li>[ ] Are test objectives SMART (Specific, Measurable, Achievable, Relevant, Time-bound)?</li>
+                            </ul>
+                        </li>
+                        <li>**Scope of Testing:**
+                            <ul>
+                                <li>[ ] Are in-scope functionalities/modules clearly defined?</li>
+                                <li>[ ] Are out-of-scope items explicitly mentioned?</li>
+                                <li>[ ] Is the level of testing (e.g., Unit, Integration, System, UAT) specified?</li>
+                            <li>[ ] Does the scope align with project requirements and user stories?</li>
+                            </ul>
+                        </li>
+                        <li>**Test Strategy & Approach:**
+                            <ul>
+                                <li>[ ] Is the overall testing approach (e.g., Agile, Waterfall, Risk-based) clear?</li>
+                                <li>[ ] Are test types (e.g., Functional, Performance, Security, Usability) identified?</li>
+                                <li>[ ] Is there a clear automation strategy?</li>
+                                <li>[ ] How will test data be managed and provisioned?</li>
+                                <li>[ ] What is the defect management process?</li>
+                            </ul>
+                        </li>
+                        <li>**Test Environment & Data:**
+                            <ul>
+                                <li>[ ] Are environment requirements (hardware, software, network) defined?</li>
+                                <li>[ ] Is the test data strategy adequate and realistic?</li>
+                            </ul>
+                        </li>
+                        <li>**Roles & Responsibilities:**
+                            <ul>
+                                <li>[ ] Are roles and responsibilities of QA team members and other stakeholders clearly assigned?</li>
+                            </ul>
+                        </li>
+                        <li>**Schedule & Resources:**
+                            <ul>
+                                <li>[ ] Is the testing schedule realistic and aligned with project timelines?</li>
+                                <li>[ ] Are required resources (tools, budget, personnel) identified and allocated?</li>
+                            </ul>
+                        </li>
+                        <li>**Entry & Exit Criteria:**
+                            <ul>
+                                <li>[ ] Are clear and measurable entry criteria defined for each test phase?</li>
+                                <li>[ ] Are clear and measurable exit criteria defined for each test phase (e.g., test pass rate, open critical defects)?</li>
+                            </ul>
+                        </li>
+                        <li>**Risk Management:**
+                            <ul>
+                                <li>[ ] Are potential risks to the testing process identified?</li>
+                                <li>[ ] Are mitigation plans for identified risks provided?</li>
+                            </ul>
+                        </li>
+                        <li>**Deliverables:**
+                            <ul>
+                                <li>[ ] Are all test deliverables (e.g., Test Cases, Test Summary Reports, Defect Logs) clearly listed?</li>
+                            </ul>
+                        </li>
+                        <li>**Tools & Technologies:**
+                            <ul>
+                                <li>[ ] Are all testing tools and technologies specified (e.g., Test Management, Automation, Performance, Security)?</li>
+                            </ul>
+                        </li>
+                        <li>**Approvals:**
+                            <ul>
+                                <li>[ ] Are there clear sign-off requirements for the test plan?</li>
+                            </ul>
+                        </li>
+                    </ul>`
+                },
+                'Agile QA Daily Standup Prompts': {
+                    text: `You are a Test Manager/Scrum Master. Provide a set of effective prompts for a daily standup meeting for an Agile QA team. Focus on progress, blockers, upcoming tasks, and collaboration, encouraging concise and actionable updates.`,
+                    output: `<h4>Agile QA Daily Standup Prompts:</h4>
+                    <p>These prompts encourage team members to provide concise updates and identify areas where they need assistance or where they can offer help.</p>
+                    <ol>
+                        <li>**What did you complete since yesterday that contributes to the sprint goal?** (Focus on completed tasks, test cases executed, automation scripts developed, bugs verified.)</li>
+                        <li>**What are you planning to work on today?** (Outline specific testing activities: designing new test cases, executing tests, debugging automation, analyzing results, attending relevant meetings.)</li>
+                        <li>**Are there any impediments or blockers preventing you from completing your work?** (Identify anything hindering progress, e.g., environment issues, missing requirements, unassigned bugs, dependencies on other teams.)</li>
+                        <li>**Are there any dependencies or handoffs you need from others, or that others need from you?** (Promote proactive communication about collaboration points.)</li>
+                        <li>**What is the status of critical/high priority defects you are tracking?** (Quick update on high-impact issues.)</li>
+                        <li>**Do you foresee any risks to the sprint's quality or timeline based on your current understanding?** (Encourage early identification of potential issues.)</li>
+                    </ol>
+                    <p><b>Tips for the Scrum Master/Test Manager:</b></p>
+                    <ul>
+                        <li>Keep it time-boxed (e.g., 15 minutes).</li>
+                        <li>Encourage brief, factual updates.</li>
+                        <li>"Park" detailed discussions for after the standup ("offline").</li>
+                        <li>Facilitate problem-solving, don't solve problems *during* the standup.</li>
+                    </ul>`
+                },
+                'QA Team Performance Metrics': {
+                    text: `You are a QA Manager analyzing team performance. Identify key performance indicators (KPIs) and metrics for a QA team. Categorize them by effectiveness, efficiency, and quality. Explain how each metric provides insight into team performance and overall product quality.`,
+                    output: `<h4>Key Performance Indicators (KPIs) for QA Team:</h4>
+                    <p>Metrics provide data points, while KPIs are strategic measures indicating progress towards goals.</p>
+                    <h5>1. Effectiveness Metrics (Are we building the right things and testing them well?)</h5>
+                    <ul>
+                        <li>**Test Coverage (%):** Percentage of code/requirements covered by tests.
+                            <ul><li>**Insight:** Indicates completeness of testing. High coverage suggests fewer missed scenarios.</li></ul></li>
+                        <li>**Requirements Traceability Matrix (RTM) Coverage:** Percentage of requirements linked to test cases.
+                            <ul><li>**Insight:** Ensures all requirements are tested.</li></ul></li>
+                        <li>**Defect Escape Rate (%):** Number of defects found in production / Total defects (found in testing + production).
+                            <ul><li>**Insight:** Measures the effectiveness of the testing process in catching defects before release. Lower is better.</li></ul></li>
+                        <li>**Customer Reported Defects:** Number of defects reported by end-users.
+                            <ul><li>**Insight:** Direct measure of external quality perception.</li></ul></li>
+                    </ul>
+                    <h5>2. Efficiency Metrics (Are we doing things right and efficiently?)</h5>
+                    <ul>
+                        <li>**Test Automation Rate (%):** Number of automated test cases / Total test cases.
+                            <ul><li>**Insight:** Measures automation progress. Higher rate indicates faster feedback cycles and reduced manual effort.</li></ul></li>
+                        <li>**Test Execution Time:** Time taken to execute test suites (manual/automated).
+                            <ul><li>**Insight:** Identifies bottlenecks in execution process.</li></ul></li>
+                        <li>**Test Cycle Time:** Time from test planning start to test cycle completion.
+                            <ul><li>**Insight:** Overall speed of testing process.</li></ul></li>
+                        <li>**Defect Fix Rate / Cycle Time:** Time taken to fix and retest defects.
+                            <ul><li>**Insight:** Measures developer and QA efficiency in addressing issues.</li></ul></li>
+                        <li>**Cost of Quality (CoQ):** Cost of prevention, appraisal, internal failures, and external failures.
+                            <ul><li>**Insight:** Financial impact of quality activities and defects.</li></ul></li>
+                    </ul>
+                    <h5>3. Quality Metrics (How good is the product and the process?)</h5>
+                    <ul>
+                        <li>**Defect Density:** Number of defects per unit of code size (e.g., per KLOC) or per feature.
+                            <ul><li>**Insight:** Indicates the quality of the software itself.</li></ul></li>
+                        <li>**Defect Severity Distribution:** Breakdown of defects by severity (Critical, High, Medium, Low).
+                            <ul><li>**Insight:** Helps understand the impact of found issues.</li></ul></li>
+                        <li>**Test Pass Rate (%):** Number of passed tests / Total tests executed.
+                            <ul><li>**Insight:** Immediate measure of test run success.</li></ul></li>
+                        <li>**Test Case Effectiveness (TCE):** (Number of defects found by a test case / Number of times a test case was run) * 100.
+                            <ul><li>**Insight:** Measures how good individual test cases are at finding defects.</li></ul></li>
+                    </ul>`
+                }
+            }
+        };
+
+        // --- JS: Fix category selection and dropdown population ---
+        function populatePrompts() {
+            const promptSelect = document.getElementById('promptSelect');
+            promptSelect.innerHTML = ''; // Clear previous options
+            const categoryPrompts = testingPrompts[currentCategory];
+            if (!categoryPrompts) return;
+            let firstKey = null;
+            for (const key in categoryPrompts) {
+                if (!firstKey) firstKey = key;
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                promptSelect.appendChild(option);
+            }
+            // If there are options, select the first one
+            if (firstKey) {
+                promptSelect.value = firstKey;
+            }
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            const buttons = document.querySelectorAll('.category-tab');
+            buttons.forEach(button => {
+                if (button.getAttribute('data-category') === category) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            populatePrompts();
+            // Hide prompt and output displays when category changes
+            document.getElementById('promptDisplay').style.display = 'none';
+            document.getElementById('outputDisplay').style.display = 'none';
+            document.getElementById('promptDisplay').classList.remove('show');
+            document.getElementById('outputDisplay').classList.remove('show');
+        }
+
+        // On page load, select the first category and show its first prompt/output
+        // Also, fix any missing commas in the testingPrompts object (done in code, not shown here)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Find the first category-tab and trigger selection
+            const firstTab = document.querySelector('.category-tab');
+            if (firstTab) {
+                selectCategory(firstTab.getAttribute('data-category'));
+                // Show the first prompt/output by default
+                setTimeout(() => {
+                    displayPrompt();
+                }, 100);
+            } else {
+                populatePrompts();
+            }
+        });
+
+        function displayPrompt() {
+            const promptSelect = document.getElementById('promptSelect');
+            const selectedPromptKey = promptSelect.value;
+            if (!selectedPromptKey) {
+                alert('Please select a testing activity.');
+                return;
+            }
+            // Defensive: ensure currentCategory and selectedPromptKey exist in testingPrompts
+            if (!testingPrompts[currentCategory] || !testingPrompts[currentCategory][selectedPromptKey]) {
+                alert('No prompt found for this selection.');
+                return;
+            }
+            const promptData = testingPrompts[currentCategory][selectedPromptKey];
+            const promptTextElement = document.getElementById('promptText');
+            const outputContentElement = document.getElementById('outputContent');
+            const promptDisplay = document.getElementById('promptDisplay');
+            const outputDisplay = document.getElementById('outputDisplay');
+
+            // Get user input and advanced options
+            const userStory = document.getElementById('userStoryInput').value.trim();
+            const acceptanceCriteria = document.getElementById('acceptanceCriteria').value.trim();
+            const testData = document.getElementById('testData').value.trim();
+            const environment = document.getElementById('environment').value.trim();
+
+            let promptText = promptData.text;
+
+            // Personalize the prompt
+            if (userStory) {
+                promptText = `For the following user story/requirement:\n"${userStory}"\n\n` + promptText;
+            }
+            if (acceptanceCriteria) {
+                promptText += `\n\nAcceptance Criteria: ${acceptanceCriteria}`;
+            }
+            if (testData) {
+                promptText += `\n\nTest Data: ${testData}`;
+            }
+            if (environment) {
+                promptText += `\n\nEnvironment: ${environment}`;
+            }
+
+            // Render with line breaks
+            promptTextElement.innerHTML = promptText.replace(/\n/g, '<br>');
+            outputContentElement.innerHTML = promptData.output;
+
+            promptDisplay.style.display = 'block';
+            outputDisplay.style.display = 'block';
+
+            // Trigger animations
+            setTimeout(() => {
+                promptDisplay.classList.add('show');
+                outputDisplay.classList.add('show');
+            }, 50); // Small delay to ensure display:block applies before animation
+
+            // Scroll to prompts
+            promptDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptText').innerText;
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert('Prompt copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy prompt: ', err);
+            });
+        }
+
+        function copyOutput() {
+            const outputContent = document.getElementById('outputContent').innerText;
+            navigator.clipboard.writeText(outputContent).then(() => {
+                alert('Output copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy output: ', err);
+            });
+        }
+
+        function tableToCSV(table) {
+            let csv = [];
+            for (let row of table.rows) {
+                let rowData = [];
+                for (let cell of row.cells) {
+                    // Escape quotes and commas
+                    let text = cell.innerText.replace(/"/g, '""');
+                    rowData.push('"' + text + '"');
+                }
+                csv.push(rowData.join(','));
+            }
+            return csv.join('\n');
+        }
+
+        function downloadOutput() {
+            const outputContent = document.getElementById('outputContent');
+            const table = outputContent.querySelector('table');
+            if (table) {
+                const csv = tableToCSV(table);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${document.getElementById('promptSelect').value}_Output.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert('Output downloaded as CSV file!');
+            } else {
+                alert('No table found to export.');
+            }
+        }
+
+        function exportToJira() {
+            alert('Export to Jira functionality is a complex integration and would require backend development and Jira API access. This is a placeholder for future enhancement!');
+        }
+
+        function enhancePrompt() {
+            alert('Enhance Prompt functionality would involve AI re-processing the current prompt with "enhance" directives. This is a placeholder for future enhancement!');
+        }
+
+        function generateVariations() {
+            alert('Generate Variations functionality would involve AI generating alternative prompts for the selected activity. This is a placeholder for future enhancement!');
+        }
+
+        function showAbout() {
+            alert('This QA Testing Prompt Generator is designed to assist QA professionals in generating detailed and comprehensive prompts for various testing activities, powered by advanced AI capabilities. Created to streamline your daily QA tasks!');
+        }
+
+        function showHelp() {
+            alert('For help and support, please contact your administrator or refer to the internal documentation. This is a demo tool.');
+        }
+
+        function toggleAdvancedOptions() {
+            const adv = document.getElementById('advancedOptions');
+            adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
+            const link = document.getElementById('toggleAdvanced');
+            link.textContent = adv.style.display === 'block' ? 'Hide Advanced Options' : 'Show Advanced Options';
+        }
+    </script>
+</body>
+</html>
