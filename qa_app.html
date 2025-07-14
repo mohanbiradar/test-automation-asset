@@ -231,6 +231,35 @@
             .card-section { padding: 20px; }
             .category-tabs { justify-content: center; }
         }
+        .mini-feature-card {
+            background: #f8f9ff;
+            border: 1px solid #e3f2fd;
+            border-radius: 10px;
+            padding: 12px 18px 10px 18px;
+            min-width: 110px;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.07);
+            font-size: 1em;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .mini-feature-card:hover {
+            box-shadow: 0 4px 16px rgba(76,205,196,0.13);
+            border-color: #4ecdc4;
+        }
+        .mini-feature-icon {
+            font-size: 1.5em;
+            margin-bottom: 4px;
+        }
+        .mini-feature-label {
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
@@ -245,34 +274,35 @@
     </div>
 
     <div class="container">
-        <div class="card-section">
-            <h2 class="mb-4" style="color: #1e3c72;">🚀 Next-Gen AI-Powered QA Platform: Innovation, Analytics & Integration</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h5>AI-Driven Test Generation & Insights</h5>
-                    <p>Leverage advanced AI to generate, enhance, and validate test cases, strategies, and automation scripts—ensuring maximum coverage, efficiency, and continuous improvement.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h5>Predictive Analytics</h5>
-                    <p>Identify risk areas, forecast defect trends, and optimize test planning with built-in analytics and smart recommendations.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h5>Seamless Integration</h5>
-                    <p>Integrate effortlessly with Jira Xray, Excel, GitLab, CI/CD pipelines, and leading automation frameworks for a unified, automated QA workflow.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h5>Multi-Framework & Cross-Platform Support</h5>
-                    <p>Comprehensive support for Selenium, Cypress, Playwright, RestAssured, Postman, JMeter, and more—across web, mobile, API, database, and cloud testing.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h5>Continuous Quality Assurance</h5>
-                    <p>Enable DevOps-ready prompts for pipeline testing, shift-left quality, and continuous improvement throughout the software lifecycle.</p>
-                </div>
+        <div class="card" style="background: linear-gradient(90deg, #e0e7ff 0%, #f8fafc 100%); border-left: 6px solid #4ecdc4; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(102,126,234,0.07);">
+            <div class="card-body" style="padding: 22px 28px;">
+                <h4 style="color:#1e3c72; font-weight:700; margin-bottom:8px;">Platform Summary</h4>
+                <p style="font-size:1.13em; color:#333; margin-bottom:0;">
+                    This app delivers a next-gen QA prompt generator web app with AI integration, supporting multiple QA/testing domains, rich user input options, interactive prompt/sample output features, and a dashboard for metrics—aimed at boosting efficiency and collaboration for QA professionals.
+                </p>
+            </div>
+        </div>
+        <!-- Compact feature highlights bar replaced with small info cards -->
+        <div class="d-flex flex-wrap justify-content-center align-items-stretch mb-4" style="gap: 18px;">
+            <div class="mini-feature-card" title="AI-powered prompt generation, enhancement, and validation for smarter QA.">
+                <div class="mini-feature-icon">🤖</div>
+                <div class="mini-feature-label">AI-Powered</div>
+            </div>
+            <div class="mini-feature-card" title="Built-in analytics and smart recommendations for risk and trend prediction.">
+                <div class="mini-feature-icon">📈</div>
+                <div class="mini-feature-label">Analytics</div>
+            </div>
+            <div class="mini-feature-card" title="Effortless integration with Jira Xray, Excel, GitLab, CI/CD, and more.">
+                <div class="mini-feature-icon">🔗</div>
+                <div class="mini-feature-label">Integrations</div>
+            </div>
+            <div class="mini-feature-card" title="Support for Selenium, Cypress, Playwright, API, mobile, cloud, and more.">
+                <div class="mini-feature-icon">📊</div>
+                <div class="mini-feature-label">Multi-Framework</div>
+            </div>
+            <div class="mini-feature-card" title="DevOps-ready, shift-left quality, and continuous improvement.">
+                <div class="mini-feature-icon">🛡️</div>
+                <div class="mini-feature-label">Continuous QA</div>
             </div>
         </div>
 
