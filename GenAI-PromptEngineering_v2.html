@@ -1,0 +1,381 @@
+<!DOCTYPE ahtml>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Collaboration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #555555;
+            --secondary-color: #888888;
+            --highlight-color: #2F6C64;
+            --background-color: #F8F9FA;
+            --card-background: #FFFFFF;
+            --light-background: #E8F5E3;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            background-color: var(--background-color);
+        }
+
+        .prompt-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .prompt-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+        .btn-filter.active {
+            background-color: var(--highlight-color);
+            color: var(--card-background);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .typing-effect {
+            overflow: hidden;
+            white-space: pre-wrap;
+            animation: typing 2s steps(60, end) forwards;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto px-4 py-12 md:py-20 max-w-7xl">
+
+        <header class="text-center mb-16 md:mb-24">
+            <div class="bg-teal-50 p-6 md:p-10 rounded-2xl shadow-inner">
+                <h1 class="text-4xl md:text-5xl font-bold mb-3 text-highlight-color">GenAI: From Consumption to Collaboration</h1>
+                <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">Mastering the Partnership</p>
+            </div>
+        </header>
+
+        <section id="the-paradigm-shift" class="mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">The Paradigm Shift: From Consumption to Collaboration</h2>
+            <div class="text-center max-w-4xl mx-auto text-lg md:text-xl text-gray-600 space-y-4">
+                <p>We already use GenAI daily to automate tasks and boost our productivity. But what's next? The real opportunity lies in moving beyond simple consumption and into a dynamic partnership with these systems by mastering the art of **prompt engineering**.</p>
+                <div class="mt-8 space-y-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 flex items-center">
+                            <span class="text-4xl mr-3">🚨</span> The Reality Check: What We're Missing
+                        </h3>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> Vague, Generic Output</h4>
+                                <p class="text-gray-600 text-sm">AI often provides boilerplate responses that don't fit our specific needs or standards.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> Wasted Time on Revisions</h4>
+                                <p class="text-gray-600 text-sm">Multiple back-and-forth iterations are needed because the initial output missed the mark.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> Inconsistent Quality</h4>
+                                <p class="text-gray-600 text-sm">Some colleagues get great results while others struggle with basic requests.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> Missing Context</h4>
+                                <p class="text-gray-600 text-sm">AI doesn't understand our project context, quality standards, or business constraints.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> Untapped Potential</h4>
+                                <p class="text-gray-600 text-sm">We're stuck with basic automation instead of strategic problem-solving.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">❌</span> No Validation Framework</h4>
+                                <p class="text-gray-600 text-sm">We accept AI output without systematic quality checks or verification.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-green-600 flex items-center">
+                            <span class="text-4xl mr-3">✨</span> The C.R.A.F.T. Solution
+                        </h3>
+                        <p class="mb-6 text-lg text-gray-600">
+                            C.R.A.F.T. is a simple framework to build more effective prompts. It stands for:
+                            <b>C</b>ontext, <b>R</b>equirements, <b>A</b>udience, <b>F</b>ormat, and <b>T</b>esting.
+                            Using these components turns a vague request into a powerful directive for the AI.
+                        </p>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">🎯</span> Context</h4>
+                                <p class="text-gray-600 text-sm">**Missing:** The AI doesn't know our role. <br> **Solution:** Provide a clear role and purpose.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">📋</span> Requirements</h4>
+                                <p class="text-gray-600 text-sm">**Missing:** Vague expectations. <br> **Solution:** Set specific, measurable outcomes.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">👥</span> Audience</h4>
+                                <p class="text-gray-600 text-sm">**Missing:** Generic output. <br> **Solution:** Tailor the output for a specific audience.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">📝</span> Format</h4>
+                                <p class="text-gray-600 text-sm">**Missing:** Inconsistent style. <br> **Solution:** Define the structure and style of the response.</p>
+                            </div>
+                            <div class="prompt-card bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-lg mb-2 flex items-center"><span class="text-xl mr-2">✅</span> Testing</h4>
+                                <p class="text-gray-600 text-sm">**Missing:** No validation. <br> **Solution:** Verify the output for accuracy and reliability.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="prompt-sandbox" class="mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">The Anatomy of Effective Prompt Engineering</h2>
+            <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-10">The most important lesson? The output isn't the problem—my prompting was. See how a simple prompt evolves into a powerful, effective request using the C.R.A.F.T. framework.</p>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-stretch">
+                <div class="prompt-card bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200 flex flex-col">
+                    <h3 class="text-xl md:text-2xl font-semibold mb-4 text-highlight-color">The Prompt</h3>
+                    <div class="flex-grow bg-gray-100 p-5 rounded-lg text-gray-800 text-sm md:text-base whitespace-pre-wrap overflow-auto">
+                        <pre id="prompt-text">"Write a Gherkin test for login"</pre>
+                    </div>
+                </div>
+                <div class="prompt-card bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200 flex flex-col">
+                    <h3 class="text-xl md:text-2xl font-semibold mb-4 text-highlight-color">The AI's Response</h3>
+                    <div class="flex-grow bg-gray-100 p-5 rounded-lg text-gray-800 text-sm md:text-base overflow-auto">
+                        <pre id="output-text">`Feature: User Login
+  Scenario: A generic test case
+    When I try to log in
+    Then something happens
+`</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <button id="transform-btn" class="py-3 px-8 rounded-full text-white font-bold bg-highlight-color hover:bg-teal-700 transition-colors shadow-md">
+                    Transform with C.R.A.F.T. &rarr;
+                </button>
+            </div>
+        </section>
+
+        <section id="use-cases" class="mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Transformative Applications Across Roles</h2>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button id="btn-dev" class="btn-filter py-2 px-5 rounded-full text-gray-800 bg-gray-200 font-semibold active">Devs & DevOps</button>
+                <button id="btn-qa" class="btn-filter py-2 px-5 rounded-full text-gray-800 bg-gray-200 font-semibold">QA & Scrum Masters</button>
+                <button id="btn-mgr" class="btn-filter py-2 px-5 rounded-full text-gray-800 bg-gray-200 font-semibold">Managers</button>
+            </div>
+            <div id="content-container">
+                <div id="content-dev" class="role-content grid md:grid-cols-3 gap-6 slide-up">
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Architecture Review</h3>
+                        <p class="text-gray-600 text-sm">"As a senior architect for a FinTech company, provide a detailed review of this new microservice. **Requirements**: Assess its scalability using AWS Lambda, identify potential security risks related to data encryption, and evaluate its maintainability based on our team's Python style guide. **Format**: A bulleted list of findings, with a severity rating for each issue."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Code Quality Analysis</h3>
+                        <p class="text-gray-600 text-sm">"Act as a code quality specialist. Analyze the provided JavaScript code for our new e-commerce checkout module. **Requirements**: Identify common technical debt patterns (e.g., God objects, duplicated logic, complex conditionals). **Audience**: Junior developers on the team. **Format**: Provide a list of the top 5 issues, with a clear explanation of why each is an issue and a refactoring suggestion for each one. Include a short summary at the end."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Incident Response</h3>
+                        <p class="text-gray-600 text-sm">"Act as a DevOps engineer. Analyze the attached logs from our production Kubernetes cluster following a service degradation. **Requirements**: Identify the potential root cause of the spike in latency, pinpoint the specific service or container that failed, and suggest a 3-step investigation plan for the on-call team. **Format**: A numbered list for the investigation steps, a short paragraph for the root cause summary, and highlight the service name."</p>
+                    </div>
+                </div>
+                <div id="content-qa" class="role-content hidden grid md:grid-cols-3 gap-6 slide-up">
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Test Strategy Generation</h3>
+                        <p class="text-gray-600 text-sm">"As a test lead, create a risk-based testing strategy for a new B2B payment processing microservice. **Requirements**: Identify the highest risk areas (e.g., transaction integrity, data security, third-party API calls) and provide specific test cases for each risk level (high, medium, low). **Audience**: The development team and product manager. **Format**: A table with columns for 'Risk Area', 'Description', and 'Example Test Cases'."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Edge Case Discovery</h3>
+                        <p class="text-gray-600 text-sm">"Act as a security tester. Analyze the provided OpenAPI spec for our user registration API. **Requirements**: Identify potential security vulnerabilities, including input validation bypass, injection flaws, and weak authentication schemes. **Format**: A markdown list with headings for each vulnerability type, a brief description of the risk, and a corresponding Gherkin scenario to test it."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Automated Documentation</h3>
+                        <p class="text-gray-600 text-sm">"Act as an automated documentation tool. Given a test run summary, generate a concise report that explains the business impact of the failed tests. **Requirements**: Focus on how the failures affect key user flows (e.g., 'user cannot add item to cart'). **Audience**: Product owners and business stakeholders. **Format': A two-paragraph summary, followed by a bulleted list of failed user stories."</p>
+                    </div>
+                </div>
+                <div id="content-mgr" class="role-content hidden grid md:grid-cols-3 gap-6 slide-up">
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Pattern Recognition</h3>
+                        <p class="text-gray-600 text-sm">"Act as a data analyst. Analyze the last 5 sprint retrospectives from the 'Project X' team. **Requirements**: Identify recurring themes or systemic issues that have been mentioned in at least three of the retrospectives. Categorize these issues into 'Process', 'Communication', and 'Technical Debt'. **Format': A short, high-level summary paragraph followed by a detailed list of findings for each category."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Stakeholder Communication</h3>
+                        <p class="text-gray-600 text-sm">"Act as a technical project manager. Translate the following technical blockers for the 'User Profile' feature into a clear, non-technical email update for executive stakeholders. **Requirements**: Focus on the business impact, estimated timeline delays, and a proposed mitigation plan. **Audience**: Non-technical executives. **Format': An email draft with a clear subject line, a concise summary, and a bulleted list of key takeaways."</p>
+                    </div>
+                    <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2">Team Development</h3>
+                        <p class="text-gray-600 text-sm">"Act as a team lead. Given a list of new technologies for the upcoming quarter (e.g., React Server Components, Rust for backend, GraphQL), design a professional development plan for my team of 4 front-end engineers. **Requirements**: The plan should balance individual learning with project needs and include an estimated time commitment for each item. **Format': A table with columns for 'Technology', 'Skill Level', 'Learning Resource', and 'Time Estimate'."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SECTION ADDED HERE -->
+        <section id="our-toolkit" class="mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Our GenAI Toolkit: Building the Future Together</h2>
+            <p class="text-center max-w-4xl mx-auto text-lg text-gray-600 mb-10">We've applied these concepts to build a few practical utilities. Think of these as our first steps in creating a new way of working, where our tools learn and grow alongside us.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Utilities Dashboard</h3>
+                    <p class="text-gray-600 text-sm">A centralized command center where we can access and manage a growing collection of single-purpose GenAI tools, from content generators to data analyzers.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">TestBuddy - AI Prompt Library</h3>
+                    <p class="text-gray-600 text-sm">A shared repository of pre-crafted, high-impact prompts for developers and testers. This ensures consistency and quality across all our projects.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">The Creative Partner</h3>
+                    <p class="text-gray-600 text-sm">A brainstorming companion that helps us overcome creative blocks and explore new ideas. It's our go-to for finding new directions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="validation-ethics" class="mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Trust but Verify: The Professional Standard</h2>
+            <p class="text-center max-w-4xl mx-auto text-lg text-gray-600 mb-10">AI is a powerful tool, but its output requires our critical judgment. It's our responsibility to validate, audit, and own the results. Here are the core principles of professional AI usage.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Logic Check</h3>
+                    <p class="text-gray-600 text-sm">Does this make sense? Does it solve the right problem? Question AI's suggestions just as you would a junior dev's code.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Context Verification</h3>
+                    <p class="text-gray-600 text-sm">Does this solution fit our specific technical stack, team conventions, and business constraints?</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Standard Compliance</h3>
+                    <p class="text-gray-600 text-sm">Is the output secure? Is it maintainable? Does it follow our quality and ethical guidelines?</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Risk Assessment</h3>
+                    <p class="text-gray-600 text-sm">What are the potential negative side effects? An AI-generated optimization might introduce a new bug or security vulnerability.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="our-next-chapter" class="bg-teal-50 p-10 rounded-xl text-center shadow-inner">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Next Chapter: The AI Collaboration Journey</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto mb-8">The question isn't whether AI will change our work—it already has. The question is: will we be people who simply use AI, or will we leverage it to do work that was previously impossible? Here's how we can continue our journey together.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Step 1: Lay the Foundation</h3>
+                    <p class="text-gray-600 text-sm">Choose one repetitive task. Apply the C.R.A.F.T. framework. Document the before/after.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Step 2: Expand Our Horizons</h3>
+                    <p class="text-600 text-sm">Try advanced prompting techniques. Share your learnings with a colleague.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Step 3: Integrate and Evolve</h3>
+                    <p class="text-gray-600 text-sm">Integrate AI into a standard workflow and measure the impact. Teach someone else your approach.</p>
+                </div>
+                <div class="prompt-card bg-white p-6 rounded-xl shadow border border-gray-200">
+                    <h3 class="font-bold text-lg mb-2 text-highlight-color">Step 4: Innovate and Create</h3>
+                    <p class="text-gray-600 text-sm">Attempt something previously impractical with AI. Document the new capability.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="py-8 text-center text-gray-500 text-sm border-t border-gray-200 mt-12">
+        <p>&copy; The Professional AI Collaborator. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const transformBtn = document.getElementById('transform-btn');
+        const promptText = document.getElementById('prompt-text');
+        const outputText = document.getElementById('output-text');
+
+        const initialPrompt = '"Write a Gherkin test for login"';
+        const initialOutput = `Feature: User Login
+  Scenario: A generic test case
+    When I try to log in
+    Then something happens
+`;
+
+        const advancedPrompt = `As a senior QA engineer, create a comprehensive BDD Gherkin feature file for a user login API.
+
+- **Context**: The API is for a secure user login system.
+- **Requirements**:
+    - Include a happy path scenario with valid credentials.
+    - Include scenarios for unhappy paths: incorrect password, empty fields, and a rate-limiting scenario.
+    - Add a description for each scenario.
+- **Format**: The file should be in standard Gherkin syntax with "Feature", "Scenario", "Given", "When", and "Then" steps. The output should be a single text block.`;
+        const advancedOutput = `Feature: User Authentication
+  As a user, I want to securely log in
+  So that I can access my account.
+
+  Scenario: Successful login with valid credentials
+    Given I am on the login page
+    When I enter a valid username "testuser" and a valid password "securepassword"
+    And I click the "Log In" button
+    Then I should be redirected to the dashboard page
+    And I should see a welcome message
+
+  Scenario: Failed login with incorrect password
+    Given I am on the login page
+    When I enter a valid username "testuser" and an incorrect password "wrongpassword"
+    And I click the "Log In" button
+    Then I should see an error message "Incorrect password"
+    And I should remain on the login page
+
+  Scenario: Failed login with empty fields
+    Given I am on the login page
+    When I click the "Log In" button without entering any credentials
+    Then I should see an error message "Username and password are required"
+    And I should remain on the login page
+
+  Scenario: Account locked after multiple failed attempts (rate limiting)
+    Given my account "testuser" is not locked
+    When I attempt to log in with an incorrect password 5 times
+    Then my account should be locked
+    And I should see a message "Account locked due to too many failed attempts"`;
+
+        let isTransformed = false;
+
+        transformBtn.addEventListener('click', () => {
+            isTransformed = !isTransformed;
+            const newPrompt = isTransformed ? advancedPrompt : initialPrompt;
+            const newOutput = isTransformed ? advancedOutput : initialOutput;
+
+            promptText.textContent = newPrompt;
+            outputText.innerHTML = '';
+            
+            const pre = document.createElement('pre');
+            pre.textContent = newOutput;
+            pre.classList.add('typing-effect');
+            
+            outputText.appendChild(pre);
+
+            transformBtn.textContent = isTransformed ? "See Original Prompt →" : "Transform with C.R.A.F.T. &rarr;";
+        });
+
+        const filterBtns = document.querySelectorAll('.btn-filter');
+        const roleContents = document.querySelectorAll('.role-content');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const role = btn.id.split('-')[1];
+
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                roleContents.forEach(content => {
+                    if (content.id === `content-${role}`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
